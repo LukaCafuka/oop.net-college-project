@@ -1,0 +1,7 @@
+language=Croatian
+gender=Male
+country=
+versusCountry=
+countryIndex=0
+versusCountryIndex=0
+resolution=

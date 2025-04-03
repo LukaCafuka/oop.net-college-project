@@ -37,7 +37,7 @@ namespace DataLayer.DataHandling
         }
         public static void LoadCulture()
         {
-            SetCulture(JsonModels.ConfigFile.language == "Croatian" ? "en-US" : "hr-HR");
+            SetCulture(JsonModels.ConfigFile.language == "Croatian" ? "hr-HR" : "en-US");
         }
     }
 }
