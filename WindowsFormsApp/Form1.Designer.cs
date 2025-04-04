@@ -1,6 +1,6 @@
 ﻿namespace WindowsFormsApp
 {
-    partial class formMain
+    partial class Form1
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,20 +28,34 @@
         /// </summary>
         private void InitializeComponent()
         {
+            cbChampionship = new ComboBox();
             SuspendLayout();
             // 
-            // formMain
+            // cbChampionship
+            // 
+            cbChampionship.FormattingEnabled = true;
+            cbChampionship.Location = new Point(41, 70);
+            cbChampionship.Name = "cbChampionship";
+            cbChampionship.Size = new Size(121, 23);
+            cbChampionship.TabIndex = 0;
+            // 
+            // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(984, 761);
+            Controls.Add(cbChampionship);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
-            Name = "formMain";
-            Text = "Players";
+            Name = "Form1";
+            Text = "Play";
+            FormClosing += Form1_FormClosing;
+            Load += Form1_Load;
             ResumeLayout(false);
         }
 
         #endregion
+
+        private ComboBox cbChampionship;
     }
 }

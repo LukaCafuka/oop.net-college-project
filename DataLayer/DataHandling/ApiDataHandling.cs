@@ -10,10 +10,10 @@ using RestSharp;
 
 namespace DataLayer.DataHandling
 {
-    class ApiDataHandling
+    public class ApiDataHandling
     {
         //Loads countries
-        public static Task<HashSet<Team>> LoadJsonTeams()
+        public static Task<HashSet<TeamResults>> LoadJsonTeams()
         {
             if (File.Exists(ResourceLocations.FemaleTeamsPath) && File.Exists(ResourceLocations.MaleTeamsPath))
             {
@@ -25,7 +25,7 @@ namespace DataLayer.DataHandling
                         using (StreamReader reader = new StreamReader(ResourceLocations.FemaleTeamsPath))
                         {
                             string json = reader.ReadToEnd();
-                            return JsonConvert.DeserializeObject<HashSet<Team>>(json);
+                            return JsonConvert.DeserializeObject<HashSet<TeamResults>>(json);
                         }
                     });
                 }
@@ -36,7 +36,7 @@ namespace DataLayer.DataHandling
                         using (StreamReader reader = new StreamReader(ResourceLocations.MaleTeamsPath))
                         {
                             string json = reader.ReadToEnd();
-                            return JsonConvert.DeserializeObject<HashSet<Team>>(json);
+                            return JsonConvert.DeserializeObject<HashSet<TeamResults>>(json);
                         }
                     });
                 }
@@ -50,7 +50,7 @@ namespace DataLayer.DataHandling
                     {
                         var apiClient = new RestClient(ResourceLocations.FemaleTeamsURL);
                         var response = apiClient.Execute<HashSet<Team>>(new RestRequest());
-                        return JsonConvert.DeserializeObject<HashSet<Team>>(response.Content);
+                        return JsonConvert.DeserializeObject<HashSet<TeamResults>>(response.Content);
                     });
                 }
                 else
@@ -59,7 +59,7 @@ namespace DataLayer.DataHandling
                     {
                         var apiClient = new RestClient(ResourceLocations.MaleTeamsURL);
                         var response = apiClient.Execute<HashSet<Team>>(new RestRequest());
-                        return JsonConvert.DeserializeObject<HashSet<Team>>(response.Content);
+                        return JsonConvert.DeserializeObject<HashSet<TeamResults>>(response.Content);
                     });
                 }
             }

@@ -50,5 +50,11 @@
 
         [JsonProperty("goal_differential")]
         public long GoalDifferential { get; set; }
+
+        public string FormatForComboBox()
+        {
+            return $"{Country} ({FifaCode})";
+        }
+
     }
 }

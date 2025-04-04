@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataLayer.DataHandling
 {
-    class FavouriteHandling
+    public class FavouriteHandling
     {
         public static void SaveFavourites(HashSet<string> favourites)
         {
@@ -16,6 +16,10 @@ namespace DataLayer.DataHandling
         }
         public static HashSet<string> LoadFavourites()
         {
+            if (!(File.Exists(ResourceLocations.FavouritesPath)))
+            {
+                File.Create(ResourceLocations.FavouritesPath).Close();
+            }
             string[] lines = File.ReadAllLines(ResourceLocations.FavouritesPath);
             HashSet<string> processedData = new HashSet<string>();
             lines.ToList().ForEach(line => processedData.Add(line));

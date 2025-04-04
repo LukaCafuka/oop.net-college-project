@@ -1,10 +1,16 @@
 using DataLayer.DataHandling;
+using QuickType;
+using DataLayer.JsonModels;
+using System.Reflection;
 
 namespace WindowsFormsApp
 {
-    public partial class formMain : Form
+    public partial class Form1 : Form
     {
-        public formMain()
+
+        //Favourite List
+        HashSet<string> userFavourites = new HashSet<string>();
+        public Form1()
         {
             InitializeComponent();
 
@@ -12,6 +18,24 @@ namespace WindowsFormsApp
 
             ConfigHandling.ConfigExists();
             CultureHandling.LoadCulture();
+            userFavourites = FavouriteHandling.LoadFavourites();
+        }
+
+        private async void FillData()
+        {
+            try
+            {
+                HashSet<TeamResults> teams = await ApiDataHandling.LoadJsonTeams();
+
+                foreach (var orderedTeam in teams)
+                {
+                    cbChampionship.Items.Add(orderedTeam.FormatForComboBox());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void HandleConfigFileMissing()
@@ -33,6 +57,28 @@ namespace WindowsFormsApp
                 }
             }
 
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            this.Text = CultureHandling.GetString("MainFormTitle");
+            FillData();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Do you want to exit?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                FavouriteHandling.SaveFavourites(userFavourites);
+                Dispose();
+                Application.Exit();
+            }
+            else
+            {
+                e.Cancel = true;
+                return;
+            }
         }
     }
 }

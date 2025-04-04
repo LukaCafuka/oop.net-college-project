@@ -138,6 +138,9 @@
   <data name="LanguageGroupBoxText" xml:space="preserve">
     <value>Choose your language</value>
   </data>
+  <data name="MainFormTitle" xml:space="preserve">
+    <value>Players</value>
+  </data>
   <data name="MaleGender" xml:space="preserve">
     <value>Male</value>
   </data>

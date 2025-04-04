@@ -13,7 +13,7 @@ namespace WindowsFormsApp
             // see https://aka.ms/applicationconfiguration.
             CultureHandling.Initialize("WindowsFormsApp.FormLang", typeof(ConfigForm));
             ApplicationConfiguration.Initialize();
-            Application.Run(new formMain());
+            Application.Run(new Form1());
         }
     }
 }
