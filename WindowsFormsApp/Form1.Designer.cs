@@ -29,21 +29,42 @@
         private void InitializeComponent()
         {
             cbChampionship = new ComboBox();
+            pnlPlayers = new Panel();
+            pnlPlayerFavourites = new Panel();
             SuspendLayout();
             // 
             // cbChampionship
             // 
             cbChampionship.FormattingEnabled = true;
-            cbChampionship.Location = new Point(41, 70);
+            cbChampionship.Location = new Point(12, 12);
             cbChampionship.Name = "cbChampionship";
-            cbChampionship.Size = new Size(121, 23);
+            cbChampionship.Size = new Size(158, 23);
             cbChampionship.TabIndex = 0;
+            // 
+            // pnlPlayers
+            // 
+            pnlPlayers.AutoScroll = true;
+            pnlPlayers.Location = new Point(12, 72);
+            pnlPlayers.Name = "pnlPlayers";
+            pnlPlayers.Size = new Size(534, 381);
+            pnlPlayers.TabIndex = 1;
+            // 
+            // pnlPlayerFavourites
+            // 
+            pnlPlayerFavourites.AutoScroll = true;
+            pnlPlayerFavourites.ImeMode = ImeMode.NoControl;
+            pnlPlayerFavourites.Location = new Point(552, 72);
+            pnlPlayerFavourites.Name = "pnlPlayerFavourites";
+            pnlPlayerFavourites.Size = new Size(420, 381);
+            pnlPlayerFavourites.TabIndex = 2;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(984, 761);
+            Controls.Add(pnlPlayerFavourites);
+            Controls.Add(pnlPlayers);
             Controls.Add(cbChampionship);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
@@ -57,5 +78,7 @@
         #endregion
 
         private ComboBox cbChampionship;
+        private Panel pnlPlayers;
+        private Panel pnlPlayerFavourites;
     }
 }

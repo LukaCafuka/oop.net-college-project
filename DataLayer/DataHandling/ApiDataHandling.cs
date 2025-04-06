@@ -7,11 +7,16 @@ using System.Text;
 using System.Threading.Tasks;
 using DataLayer.JsonModels;
 using RestSharp;
+using static System.Net.Mime.MediaTypeNames;
+using Json2 = System.Text.Json;
 
 namespace DataLayer.DataHandling
 {
     public class ApiDataHandling
     {
+        [JsonProperty("time")]
+        [JsonConverter(typeof(TimeEnumConverter))]
+        public Time Time { get; set; }
         //Loads countries
         public static Task<HashSet<TeamResults>> LoadJsonTeams()
         {
@@ -25,7 +30,7 @@ namespace DataLayer.DataHandling
                         using (StreamReader reader = new StreamReader(ResourceLocations.FemaleTeamsPath))
                         {
                             string json = reader.ReadToEnd();
-                            return JsonConvert.DeserializeObject<HashSet<TeamResults>>(json);
+                            return JsonConvert.DeserializeObject<HashSet<TeamResults>>(json) ?? new HashSet<TeamResults>();
                         }
                     });
                 }
@@ -36,7 +41,7 @@ namespace DataLayer.DataHandling
                         using (StreamReader reader = new StreamReader(ResourceLocations.MaleTeamsPath))
                         {
                             string json = reader.ReadToEnd();
-                            return JsonConvert.DeserializeObject<HashSet<TeamResults>>(json);
+                            return JsonConvert.DeserializeObject<HashSet<TeamResults>>(json) ?? new HashSet<TeamResults>();
                         }
                     });
                 }
@@ -50,7 +55,7 @@ namespace DataLayer.DataHandling
                     {
                         var apiClient = new RestClient(ResourceLocations.FemaleTeamsURL);
                         var response = apiClient.Execute<HashSet<Team>>(new RestRequest());
-                        return JsonConvert.DeserializeObject<HashSet<TeamResults>>(response.Content);
+                        return JsonConvert.DeserializeObject<HashSet<TeamResults>>(response.Content) ?? new HashSet<TeamResults>();
                     });
                 }
                 else
@@ -59,7 +64,7 @@ namespace DataLayer.DataHandling
                     {
                         var apiClient = new RestClient(ResourceLocations.MaleTeamsURL);
                         var response = apiClient.Execute<HashSet<Team>>(new RestRequest());
-                        return JsonConvert.DeserializeObject<HashSet<TeamResults>>(response.Content);
+                        return JsonConvert.DeserializeObject<HashSet<TeamResults>>(response.Content) ?? new HashSet<TeamResults>();
                     });
                 }
             }
@@ -78,7 +83,7 @@ namespace DataLayer.DataHandling
                         using (StreamReader reader = new StreamReader(ResourceLocations.FemaleMatchesPath))
                         {
                             string json = reader.ReadToEnd();
-                            return JsonConvert.DeserializeObject<HashSet<Matches>>(json);
+                            return JsonConvert.DeserializeObject<HashSet<Matches>>(json) ?? new HashSet<Matches>();
                         }
                     });
                 }
@@ -89,7 +94,7 @@ namespace DataLayer.DataHandling
                         using (StreamReader reader = new StreamReader(ResourceLocations.MaleMatchesPath))
                         {
                             string json = reader.ReadToEnd();
-                            return JsonConvert.DeserializeObject<HashSet<Matches>>(json);
+                            return JsonConvert.DeserializeObject<HashSet<Matches>>(json) ?? new HashSet<Matches>();
                         }
                     });
                 }
@@ -103,16 +108,16 @@ namespace DataLayer.DataHandling
                     {
                         var apiClient = new RestClient(ResourceLocations.FemaleMatchesDetailedURL);
                         var response = apiClient.Execute<HashSet<Matches>>(new RestRequest());
-                        return JsonConvert.DeserializeObject<HashSet<Matches>>(response.Content);
+                        return JsonConvert.DeserializeObject<HashSet<Matches>>(response.Content) ?? new HashSet<Matches>();
                     });
                 }
                 else
                 {
-                    return Task.Run(() =>
+                    return Task.Run(async () =>
                     {
                         var apiClient = new RestClient(ResourceLocations.MaleMatchesDetailedURL);
                         var response = apiClient.Execute<HashSet<Matches>>(new RestRequest());
-                        return JsonConvert.DeserializeObject<HashSet<Matches>>(response.Content);
+                        return JsonConvert.DeserializeObject<HashSet<Matches>>(response.Content) ?? new HashSet<Matches>();
                     });
                 }
             }
@@ -131,7 +136,7 @@ namespace DataLayer.DataHandling
                         using (StreamReader reader = new StreamReader(ResourceLocations.FemaleResultsPath))
                         {
                             string json = reader.ReadToEnd();
-                            return JsonConvert.DeserializeObject<HashSet<TeamResults>>(json);
+                            return JsonConvert.DeserializeObject<HashSet<TeamResults>>(json) ?? new HashSet<TeamResults>();
                         }
                     });
                 }
@@ -142,7 +147,7 @@ namespace DataLayer.DataHandling
                         using (StreamReader reader = new StreamReader(ResourceLocations.MaleResultsPath))
                         {
                             string json = reader.ReadToEnd();
-                            return JsonConvert.DeserializeObject<HashSet<TeamResults>>(json);
+                            return JsonConvert.DeserializeObject<HashSet<TeamResults>>(json) ?? new HashSet<TeamResults>();
                         }
                     });
                 }
@@ -156,7 +161,7 @@ namespace DataLayer.DataHandling
                     {
                         var apiClient = new RestClient(ResourceLocations.FemaleTeamsURL);
                         var response = apiClient.Execute<HashSet<TeamResults>>(new RestRequest());
-                        return JsonConvert.DeserializeObject<HashSet<TeamResults>>(response.Content);
+                        return JsonConvert.DeserializeObject<HashSet<TeamResults>>(response.Content) ?? new HashSet<TeamResults>();
                     });
                 }
                 else
@@ -165,7 +170,7 @@ namespace DataLayer.DataHandling
                     {
                         var apiClient = new RestClient(ResourceLocations.MaleTeamsURL);
                         var response = apiClient.Execute<HashSet<TeamResults>>(new RestRequest());
-                        return JsonConvert.DeserializeObject<HashSet<TeamResults>>(response.Content);
+                        return JsonConvert.DeserializeObject<HashSet<TeamResults>>(response.Content) ?? new HashSet<TeamResults>();
                     });
                 }
             }

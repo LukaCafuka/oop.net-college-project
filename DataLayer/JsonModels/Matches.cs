@@ -10,15 +10,16 @@
     public partial class Matches
     {
         [JsonProperty("venue")]
-        public string Venue { get; set; }
+        public string? Venue { get; set; }
 
         [JsonProperty("location")]
-        public string Location { get; set; }
+        public string? Location { get; set; }
 
         [JsonProperty("status")]
         public Status Status { get; set; }
 
         [JsonProperty("time")]
+        [JsonConverter(typeof(TimeEnumConverter))]
         public Time Time { get; set; }
 
         [JsonProperty("fifa_id")]
@@ -224,7 +225,7 @@
 
     public enum Status { Completed };
 
-    public enum Time { FullTime };
+    public enum Time { FullTime, HalfTime, ExtraTime };
 
     public enum Description { ClearNight, Cloudy, PartlyCloudy, PartlyCloudyNight, Sunny };
 
@@ -584,12 +585,15 @@
         public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null) return null;
+
             var value = serializer.Deserialize<string>(reader);
-            if (value == "full-time")
+            return value switch
             {
-                return Time.FullTime;
-            }
-            throw new Exception("Cannot unmarshal type Time");
+                "full-time" => Time.FullTime,
+                "half-time" => Time.HalfTime,
+                "extra-time" => Time.ExtraTime,
+                _ => throw new Exception($"Cannot unmarshal type Time: {value}")
+            };
         }
 
         public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
