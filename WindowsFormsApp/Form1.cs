@@ -28,120 +28,144 @@ namespace WindowsFormsApp
         {
             try
             {
-                HashSet<Matches> matches = await ApiDataHandling.LoadJsonMatches();
+                // Clear existing controls
+                pnlPlayers.Controls.Clear();
+                pnlPlayerFavourites.Controls.Clear();
 
-                StartingEleven player = new StartingEleven();
-                Team rankedPlayer = new Team();
-                Matches stadium = new Matches();
+                HashSet<Matches> matches = await ApiDataHandling.LoadJsonMatches();
 
                 HashSet<StartingEleven> playerList = new HashSet<StartingEleven>();
                 HashSet<TeamEvent> rankedPlayerList = new HashSet<TeamEvent>();
                 HashSet<Matches> rankedStadiumList = new HashSet<Matches>();
 
-                HashSet<PlayerInfo> userPlayerControls = new HashSet<PlayerInfo>();
-
+                // Reset the lists
                 userRankedPlayerControlsList = new List<TeamEvent>();
                 userRankedStadiumControlsList = new List<Matches>();
 
-                foreach (var players in matches)
+                // Process matches
+                foreach (var match in matches)
                 {
-                    if (players.HomeTeamStatistics.Country == ConfigFile.country)
+                    if (match.HomeTeamStatistics.Country == ConfigFile.country)
                     {
-                        rankedStadiumList.Add(players);
-                        foreach (var playerItem in players.HomeTeamStatistics.StartingEleven)
+                        rankedStadiumList.Add(match);
+                        userRankedStadiumControlsList.Add(match);
+                        
+                        // Add starting eleven players
+                        foreach (var player in match.HomeTeamStatistics.StartingEleven)
                         {
-                            playerList.Add(playerItem);
-
-                            foreach (var rankedItem in players.HomeTeamEvents)
-                            {
-                                rankedPlayerList.Add(rankedItem);
-                            }
+                            playerList.Add(player);
                         }
-                        foreach (var playerItem in players.HomeTeamStatistics.Substitutes)
+                        
+                        // Add substitute players
+                        foreach (var player in match.HomeTeamStatistics.Substitutes)
                         {
-                            playerList.Add(playerItem);
-
-                            foreach (var rankedItem in players.HomeTeamEvents)
-                            {
-                                rankedPlayerList.Add(rankedItem);
-                            }
+                            playerList.Add(player);
+                        }
+                        
+                        // Add team events
+                        foreach (var evt in match.HomeTeamEvents)
+                        {
+                            rankedPlayerList.Add(evt);
+                            userRankedPlayerControlsList.Add(evt);
                         }
                     }
-                    if (players.AwayTeamStatistics.Country == ConfigFile.country)
+                    
+                    if (match.AwayTeamStatistics.Country == ConfigFile.country)
                     {
-                        rankedStadiumList.Add(players);
-                        foreach (var playerItem in players.AwayTeamStatistics.StartingEleven)
+                        rankedStadiumList.Add(match);
+                        userRankedStadiumControlsList.Add(match);
+                        
+                        // Add starting eleven players
+                        foreach (var player in match.AwayTeamStatistics.StartingEleven)
                         {
-                            playerList.Add(playerItem);
-
-                            foreach (var rankedItem in players.AwayTeamEvents)
-                            {
-                                rankedPlayerList.Add(rankedItem);
-                            }
+                            playerList.Add(player);
                         }
-                        foreach (var playerItem in players.AwayTeamStatistics.Substitutes)
+                        
+                        // Add substitute players
+                        foreach (var player in match.AwayTeamStatistics.Substitutes)
                         {
-                            playerList.Add(playerItem);
-
-                            foreach (var rankedItem in players.AwayTeamEvents)
-                            {
-                                rankedPlayerList.Add(rankedItem);
-                            }
+                            playerList.Add(player);
+                        }
+                        
+                        // Add team events
+                        foreach (var evt in match.AwayTeamEvents)
+                        {
+                            rankedPlayerList.Add(evt);
+                            userRankedPlayerControlsList.Add(evt);
                         }
                     }
                 }
 
-                //Players
-                IEnumerable<StartingEleven> sortedPlayers = playerList.OrderBy(item => item.ShirtNumber);
+                // Sort players by shirt number
+                var sortedPlayers = playerList.OrderBy(p => p.ShirtNumber).ToList();
 
-                foreach (var playerItem in sortedPlayers)
+                // Create and add player controls
+                int yOffset = 10;
+                foreach (var player in sortedPlayers)
                 {
-                    rankedPlayer = new Team();
-                    foreach (var rankedItem in rankedPlayerList)
-                    {
-                        if (playerItem.Name == rankedItem.Player)
-                        {
-                            string rankedPlayerName = rankedItem.Player;
-                            rankedPlayerName = new System.Globalization.CultureInfo("en-US", false).TextInfo.ToTitleCase(rankedPlayerName.ToLower());
-                        }
-                    }
-                    ;
-                    string playerName = playerItem.Name;
-                    playerName = new System.Globalization.CultureInfo("en-US", false).TextInfo.ToTitleCase(playerName.ToLower());
-                    playerItem.Name = playerName;
-                    userPlayerControls.Add(new PlayerInfo(playerItem));
+                    // Format player name
+                    string playerName = new System.Globalization.CultureInfo("en-US", false)
+                        .TextInfo.ToTitleCase(player.Name.ToLower());
+                    player.Name = playerName;
+
+                    // Create player info control
+                    var playerInfo = new PlayerInfo(player);
+                    playerInfo.Location = new Point(10, yOffset);
+                    playerInfo.Width = pnlPlayers.Width - 30; // Leave some margin
+                    
+                    // Add to panel
+                    pnlPlayers.Controls.Add(playerInfo);
+                    
+                    // Update y offset for next control
+                    yOffset += playerInfo.Height + 10;
                 }
+
+                // Add event handler for championship selection
+                cbChampionship.SelectedIndexChanged += CbChampionship_SelectedIndexChanged;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"Error loading players: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void CbChampionship_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Refresh player display when championship is changed
+            LoadPlayers();
         }
 
         private async void LoadChampionship()
         {
             try
             {
+                cbChampionship.Items.Clear();
                 HashSet<TeamResults> teams = await ApiDataHandling.LoadJsonTeams();
 
-                foreach (var orderedTeam in teams)
+                // Sort teams by points (descending) and then by goal difference (descending)
+                foreach (var team in teams.OrderByDescending(t => t.Points).ThenByDescending(t => t.GoalDifferential))
                 {
-                    cbChampionship.Items.Add(orderedTeam.FormatForComboBox());
+                    cbChampionship.Items.Add(team.FormatForComboBox());
+                }
+
+                // Select first item if available
+                if (cbChampionship.Items.Count > 0)
+                {
+                    cbChampionship.SelectedIndex = 0;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"Error loading championship: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void HandleConfigFileMissing()
         {
-            using (var configForm = new ConfigForm()) // Replace ConfigForm with your actual form class name
+            using (var configForm = new ConfigForm())
             {
                 if (configForm.ShowDialog() == DialogResult.OK)
                 {
-
                     ConfigHandling.SaveConfig();
                 }
                 else
@@ -150,10 +174,9 @@ namespace WindowsFormsApp
                             "Configuration Required",
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Warning);
-                    Application.Exit(); // Exit the application completely
+                    Application.Exit();
                 }
             }
-
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -175,7 +198,6 @@ namespace WindowsFormsApp
             else
             {
                 e.Cancel = true;
-                return;
             }
         }
     }

@@ -1,5 +1,5 @@
 language=Croatian
-gender=Male
+gender=Female
 country=
 versusCountry=
 countryIndex=0
