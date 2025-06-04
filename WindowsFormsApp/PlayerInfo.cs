@@ -33,15 +33,19 @@ namespace WindowsFormsApp
             lblCaptain.Text = player.Captain ? "Captain" : " ";
             lblFavourite.Text = selected ? "Favourite" : "Not Favourite ";
 
-
-            string[] filePaths = Directory.GetFiles(Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName, $"Pictures/Saved/"));
-            for (int i = 0; i < filePaths.Length; i++)
+            // Use assets/images/players as the directory for player images
+            string imagesDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "assets", "images", "players");
+            if (Directory.Exists(imagesDir))
             {
-                string exactFile = ($"{filePaths[i].Substring(filePaths[i].IndexOf("d/") + 2)}");
-                string parsedFile = exactFile.Remove(exactFile.IndexOf('.'));
-                if (player.Name == parsedFile)
+                string[] filePaths = Directory.GetFiles(imagesDir);
+                for (int i = 0; i < filePaths.Length; i++)
                 {
-                    
+                    string fileName = Path.GetFileNameWithoutExtension(filePaths[i]);
+                    if (player.Name == fileName)
+                    {
+                        // You can load the image here if you have a PictureBox, e.g.:
+                        // pictureBoxPlayer.Image = Image.FromFile(filePaths[i]);
+                    }
                 }
             }
         }

@@ -22,106 +22,65 @@ namespace WindowsFormsApp
             ConfigHandling.ConfigExists();
             CultureHandling.LoadCulture();
             userFavourites = FavouriteHandling.LoadFavourites();
+
+            // Subscribe to ComboBox event ONCE
+            cbChampionship.SelectedIndexChanged += CbChampionship_SelectedIndexChanged;
         }
 
-        private async void LoadPlayers()
+        private async void LoadPlayers(string country)
         {
             try
             {
-                // Clear existing controls
                 pnlPlayers.Controls.Clear();
                 pnlPlayerFavourites.Controls.Clear();
 
                 HashSet<Matches> matches = await ApiDataHandling.LoadJsonMatches();
 
-                HashSet<StartingEleven> playerList = new HashSet<StartingEleven>();
-                HashSet<TeamEvent> rankedPlayerList = new HashSet<TeamEvent>();
-                HashSet<Matches> rankedStadiumList = new HashSet<Matches>();
-
-                // Reset the lists
+                // Use a dictionary to ensure unique players by name
+                Dictionary<string, StartingEleven> playerDict = new Dictionary<string, StartingEleven>();
                 userRankedPlayerControlsList = new List<TeamEvent>();
                 userRankedStadiumControlsList = new List<Matches>();
 
-                // Process matches
+                int matchCount = 0;
                 foreach (var match in matches)
                 {
-                    if (match.HomeTeamStatistics.Country == ConfigFile.country)
+                    if (match.HomeTeamStatistics.Country == country)
                     {
-                        rankedStadiumList.Add(match);
+                        matchCount++;
                         userRankedStadiumControlsList.Add(match);
-                        
-                        // Add starting eleven players
                         foreach (var player in match.HomeTeamStatistics.StartingEleven)
-                        {
-                            playerList.Add(player);
-                        }
-                        
-                        // Add substitute players
+                            if (!playerDict.ContainsKey(player.Name)) playerDict[player.Name] = player;
                         foreach (var player in match.HomeTeamStatistics.Substitutes)
-                        {
-                            playerList.Add(player);
-                        }
-                        
-                        // Add team events
+                            if (!playerDict.ContainsKey(player.Name)) playerDict[player.Name] = player;
                         foreach (var evt in match.HomeTeamEvents)
-                        {
-                            rankedPlayerList.Add(evt);
                             userRankedPlayerControlsList.Add(evt);
-                        }
                     }
-                    
-                    if (match.AwayTeamStatistics.Country == ConfigFile.country)
+                    if (match.AwayTeamStatistics.Country == country)
                     {
-                        rankedStadiumList.Add(match);
+                        matchCount++;
                         userRankedStadiumControlsList.Add(match);
-                        
-                        // Add starting eleven players
                         foreach (var player in match.AwayTeamStatistics.StartingEleven)
-                        {
-                            playerList.Add(player);
-                        }
-                        
-                        // Add substitute players
+                            if (!playerDict.ContainsKey(player.Name)) playerDict[player.Name] = player;
                         foreach (var player in match.AwayTeamStatistics.Substitutes)
-                        {
-                            playerList.Add(player);
-                        }
-                        
-                        // Add team events
+                            if (!playerDict.ContainsKey(player.Name)) playerDict[player.Name] = player;
                         foreach (var evt in match.AwayTeamEvents)
-                        {
-                            rankedPlayerList.Add(evt);
                             userRankedPlayerControlsList.Add(evt);
-                        }
                     }
                 }
 
-                // Sort players by shirt number
-                var sortedPlayers = playerList.OrderBy(p => p.ShirtNumber).ToList();
-
-                // Create and add player controls
+                var sortedPlayers = playerDict.Values.OrderBy(p => p.ShirtNumber).ToList();
                 int yOffset = 10;
                 foreach (var player in sortedPlayers)
                 {
-                    // Format player name
                     string playerName = new System.Globalization.CultureInfo("en-US", false)
                         .TextInfo.ToTitleCase(player.Name.ToLower());
                     player.Name = playerName;
-
-                    // Create player info control
                     var playerInfo = new PlayerInfo(player);
                     playerInfo.Location = new Point(10, yOffset);
-                    playerInfo.Width = pnlPlayers.Width - 30; // Leave some margin
-                    
-                    // Add to panel
+                    playerInfo.Width = pnlPlayers.Width - 30;
                     pnlPlayers.Controls.Add(playerInfo);
-                    
-                    // Update y offset for next control
                     yOffset += playerInfo.Height + 10;
                 }
-
-                // Add event handler for championship selection
-                cbChampionship.SelectedIndexChanged += CbChampionship_SelectedIndexChanged;
             }
             catch (Exception ex)
             {
@@ -131,8 +90,13 @@ namespace WindowsFormsApp
 
         private void CbChampionship_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Refresh player display when championship is changed
-            LoadPlayers();
+            if (cbChampionship.SelectedItem != null)
+            {
+                // Extract country name from ComboBox item (e.g., "England (ENG)")
+                string selected = cbChampionship.SelectedItem.ToString();
+                string country = selected.Split('(')[0].Trim();
+                LoadPlayers(country);
+            }
         }
 
         private async void LoadChampionship()
@@ -141,14 +105,10 @@ namespace WindowsFormsApp
             {
                 cbChampionship.Items.Clear();
                 HashSet<TeamResults> teams = await ApiDataHandling.LoadJsonTeams();
-
-                // Sort teams by points (descending) and then by goal difference (descending)
                 foreach (var team in teams.OrderByDescending(t => t.Points).ThenByDescending(t => t.GoalDifferential))
                 {
                     cbChampionship.Items.Add(team.FormatForComboBox());
                 }
-
-                // Select first item if available
                 if (cbChampionship.Items.Count > 0)
                 {
                     cbChampionship.SelectedIndex = 0;
@@ -183,7 +143,7 @@ namespace WindowsFormsApp
         {
             this.Text = CultureHandling.GetString("MainFormTitle");
             LoadChampionship();
-            LoadPlayers();
+            // Do not call LoadPlayers here, it will be called by ComboBox selection
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
