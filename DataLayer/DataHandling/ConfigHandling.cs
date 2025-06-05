@@ -9,7 +9,7 @@ namespace DataLayer.DataHandling
 {
     public class ConfigHandling
     {
-        private const char DEL = '-';
+        private const char DEL = '=';
 
         public static event Action OnConfigFileMissing;
 
@@ -83,19 +83,19 @@ namespace DataLayer.DataHandling
                             }
                             break;
                         case "country":
-                            JsonModels.ConfigFile.country = data[3];
+                            JsonModels.ConfigFile.country = data[1];
                             break;
                         case "versusCountry":
-                            JsonModels.ConfigFile.versusCountry = data[4];
+                            JsonModels.ConfigFile.versusCountry = data[1];
                             break;
                         case "countryIndex":
-                            JsonModels.ConfigFile.countryIndex = int.Parse(data[5]);
+                            JsonModels.ConfigFile.countryIndex = int.Parse(data[1]);
                             break;
                         case "versusCountryIndex":
-                            JsonModels.ConfigFile.versusCountryIndex = int.Parse(data[6]);
+                            JsonModels.ConfigFile.versusCountryIndex = int.Parse(data[1]);
                             break;
                         case "resolution":
-                            JsonModels.ConfigFile.resolution = data[7];
+                            JsonModels.ConfigFile.resolution = data[1];
                             break;
                     }
                 }

@@ -21,7 +21,6 @@ namespace WindowsFormsApp
 
         private void ConfigForm_Load(object sender, EventArgs e)
         {
-
             UpdateControlTexts();
         }
 
@@ -53,8 +52,6 @@ namespace WindowsFormsApp
         {
             CultureHandling.SetCulture("hr-HR");
             ConfigFile.language = "Croatian";
-
-
             UpdateControlTexts();
         }
 
@@ -62,8 +59,6 @@ namespace WindowsFormsApp
         {
             CultureHandling.SetCulture("en-US");
             ConfigFile.language = "English";
-
-
             UpdateControlTexts();
         }
 
@@ -78,7 +73,5 @@ namespace WindowsFormsApp
                 ConfigHandling.SaveConfig();
             }
         }
-
-
     }
 }

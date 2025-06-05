@@ -3,6 +3,7 @@ using QuickType;
 using DataLayer.JsonModels;
 using System.Reflection;
 using System.Drawing.Printing;
+using System.Diagnostics;
 
 namespace WindowsFormsApp
 {
@@ -19,34 +20,60 @@ namespace WindowsFormsApp
 
         public Form1()
         {
-            InitializeComponent();
+            try
+            {
+                Debug.WriteLine("Form1: Starting initialization...");
+                InitializeComponent();
+                Debug.WriteLine("Form1: Component initialization complete");
 
-            ConfigHandling.OnConfigFileMissing += HandleConfigFileMissing;
+                ConfigHandling.OnConfigFileMissing += HandleConfigFileMissing;
+                Debug.WriteLine("Form1: Config file missing handler registered");
 
-            ConfigHandling.ConfigExists();
-            CultureHandling.LoadCulture();
-            userFavourites = FavouriteHandling.LoadFavourites();
+                // First check if config exists and load it
+                Debug.WriteLine("Form1: Checking if config exists...");
+                if (ConfigHandling.ConfigExists())
+                {
+                    Debug.WriteLine("Form1: Loading config...");
+                    ConfigHandling.LoadConfig();
+                }
 
-            // Subscribe to ComboBox event ONCE
-            cbChampionship.SelectedIndexChanged += CbChampionship_SelectedIndexChanged;
+                // Then load culture and favorites
+                Debug.WriteLine("Form1: Loading culture...");
+                CultureHandling.LoadCulture();
+                Debug.WriteLine("Form1: Loading favorites...");
+                userFavourites = FavouriteHandling.LoadFavourites();
 
-            // Initialize panels for drag and drop
-            pnlPlayers.AllowDrop = true;
-            pnlPlayerFavourites.AllowDrop = true;
-            pnlPlayers.DragEnter += Panel_DragEnter;
-            pnlPlayerFavourites.DragEnter += Panel_DragEnter;
-            pnlPlayers.DragDrop += Panel_DragDrop;
-            pnlPlayerFavourites.DragDrop += Panel_DragDrop;
+                // Subscribe to ComboBox event ONCE
+                Debug.WriteLine("Form1: Setting up event handlers...");
+                cbChampionship.SelectedIndexChanged += CbChampionship_SelectedIndexChanged;
 
-            // Add keyboard shortcuts
-            this.KeyPreview = true;
-            this.KeyDown += Form1_KeyDown;
+                // Initialize panels for drag and drop
+                pnlPlayers.AllowDrop = true;
+                pnlPlayerFavourites.AllowDrop = true;
+                pnlPlayers.DragEnter += Panel_DragEnter;
+                pnlPlayerFavourites.DragEnter += Panel_DragEnter;
+                pnlPlayers.DragDrop += Panel_DragDrop;
+                pnlPlayerFavourites.DragDrop += Panel_DragDrop;
 
-            // Set panel properties
-            pnlPlayers.BorderStyle = BorderStyle.FixedSingle;
-            pnlPlayerFavourites.BorderStyle = BorderStyle.FixedSingle;
-            pnlPlayers.AutoScroll = true;
-            pnlPlayerFavourites.AutoScroll = true;
+                // Add keyboard shortcuts
+                this.KeyPreview = true;
+                this.KeyDown += Form1_KeyDown;
+
+                // Set panel properties
+                pnlPlayers.BorderStyle = BorderStyle.FixedSingle;
+                pnlPlayerFavourites.BorderStyle = BorderStyle.FixedSingle;
+                pnlPlayers.AutoScroll = true;
+                pnlPlayerFavourites.AutoScroll = true;
+
+                Debug.WriteLine("Form1: Initialization complete");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Form1: Error in constructor: {ex}");
+                MessageBox.Show($"An error occurred during form initialization: {ex.Message}\n\nStack Trace:\n{ex.StackTrace}", 
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw; // Re-throw to be caught by Program.Main
+            }
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -310,6 +337,12 @@ namespace WindowsFormsApp
                 // Extract country name from ComboBox item (e.g., "England (ENG)")
                 string selected = cbChampionship.SelectedItem.ToString();
                 string country = selected.Split('(')[0].Trim();
+                
+                // Save the selected index
+                ConfigFile.countryIndex = cbChampionship.SelectedIndex;
+                ConfigFile.country = country;
+                ConfigHandling.SaveConfig();
+                
                 LoadPlayers(country);
             }
         }
@@ -326,7 +359,15 @@ namespace WindowsFormsApp
                 }
                 if (cbChampionship.Items.Count > 0)
                 {
-                    cbChampionship.SelectedIndex = 0;
+                    // If we have a saved country index, try to select it
+                    if (ConfigFile.countryIndex >= 0 && ConfigFile.countryIndex < cbChampionship.Items.Count)
+                    {
+                        cbChampionship.SelectedIndex = ConfigFile.countryIndex;
+                    }
+                    else
+                    {
+                        cbChampionship.SelectedIndex = 0;
+                    }
                 }
             }
             catch (Exception ex)
