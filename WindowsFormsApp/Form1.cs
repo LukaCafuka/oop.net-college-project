@@ -41,12 +41,10 @@ namespace WindowsFormsApp
                 userRankedPlayerControlsList = new List<TeamEvent>();
                 userRankedStadiumControlsList = new List<Matches>();
 
-                int matchCount = 0;
                 foreach (var match in matches)
                 {
                     if (match.HomeTeamStatistics.Country == country)
                     {
-                        matchCount++;
                         userRankedStadiumControlsList.Add(match);
                         foreach (var player in match.HomeTeamStatistics.StartingEleven)
                             if (!playerDict.ContainsKey(player.Name)) playerDict[player.Name] = player;
@@ -57,7 +55,6 @@ namespace WindowsFormsApp
                     }
                     if (match.AwayTeamStatistics.Country == country)
                     {
-                        matchCount++;
                         userRankedStadiumControlsList.Add(match);
                         foreach (var player in match.AwayTeamStatistics.StartingEleven)
                             if (!playerDict.ContainsKey(player.Name)) playerDict[player.Name] = player;
