@@ -14,56 +14,142 @@ namespace WindowsFormsApp
     public partial class PlayerInfo : UserControl
     {
         public StartingEleven Player { get; private set; }
-        public bool selected = false;
+        public bool IsFavorite { get; private set; }
+        private ContextMenuStrip contextMenu;
+        private Label starLabel;
 
-        public string FavouriteName { get; set; }
+        public event EventHandler<PlayerInfo> FavoriteStatusChanged;
 
         public PlayerInfo(StartingEleven player)
         {
             InitializeComponent();
             Player = player;
+            InitializeContextMenu();
+            InitializeStarLabel();
             SetData(player);
+            this.AllowDrop = true;
+            this.DragEnter += PlayerInfo_DragEnter;
+            this.DragDrop += PlayerInfo_DragDrop;
         }
+
+        private void InitializeContextMenu()
+        {
+            contextMenu = new ContextMenuStrip();
+            var toggleFavorite = new ToolStripMenuItem("Toggle Favorite");
+            toggleFavorite.Click += (s, e) => ToggleFavorite();
+            contextMenu.Items.Add(toggleFavorite);
+            this.ContextMenuStrip = contextMenu;
+        }
+
+        private void InitializeStarLabel()
+        {
+            starLabel = new Label
+            {
+                AutoSize = true,
+                Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                Location = new Point(lblPlayerName.Right + 5, lblPlayerName.Top),
+                Text = "☆",
+                ForeColor = Color.Gold,
+                Visible = false
+            };
+            this.Controls.Add(starLabel);
+        }
+
         private void SetData(StartingEleven player)
         {
-            FavouriteName = player.Name;
             lblPlayerName.Text = player.Name;
             lblPlayerNumber.Text = player.ShirtNumber.ToString();
             lblPosition.Text = player.Position.ToString();
             lblCaptain.Text = player.Captain ? "Captain" : " ";
-            lblFavourite.Text = selected ? "Favourite" : "Not Favourite ";
 
-            // Use assets/images/players as the directory for player images
+            // Load player image
             string imagesDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "assets", "images", "players");
-            if (Directory.Exists(imagesDir))
+            string defaultImagePath = Path.Combine(imagesDir, "default_player.png");
+            string playerImagePath = Path.Combine(imagesDir, $"{player.Name}.png");
+
+            try
             {
-                string[] filePaths = Directory.GetFiles(imagesDir);
-                for (int i = 0; i < filePaths.Length; i++)
+                if (File.Exists(playerImagePath))
                 {
-                    string fileName = Path.GetFileNameWithoutExtension(filePaths[i]);
-                    if (player.Name == fileName)
+                    pictureBoxPlayer.Image = Image.FromFile(playerImagePath);
+                }
+                else if (File.Exists(defaultImagePath))
+                {
+                    pictureBoxPlayer.Image = Image.FromFile(defaultImagePath);
+                }
+                else
+                {
+                    // Create a default image if none exists
+                    using (Bitmap bmp = new Bitmap(40, 40))
                     {
-                        // You can load the image here if you have a PictureBox, e.g.:
-                        // pictureBoxPlayer.Image = Image.FromFile(filePaths[i]);
+                        using (Graphics g = Graphics.FromImage(bmp))
+                        {
+                            g.Clear(Color.LightGray);
+                            g.DrawString("?", new Font("Arial", 20), Brushes.Black, 15, 5);
+                        }
+                        pictureBoxPlayer.Image = new Bitmap(bmp);
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                // If there's an error loading the image, create a default one
+                using (Bitmap bmp = new Bitmap(40, 40))
+                {
+                    using (Graphics g = Graphics.FromImage(bmp))
+                    {
+                        g.Clear(Color.LightGray);
+                        g.DrawString("?", new Font("Arial", 20), Brushes.Black, 15, 5);
+                    }
+                    pictureBoxPlayer.Image = new Bitmap(bmp);
                 }
             }
         }
 
-        private void PlayersInfo_MouseDown(object sender, MouseEventArgs e)
+        public void SetFavorite(bool isFavorite)
         {
-            PlayerInfo playerInfo = sender as PlayerInfo;
+            IsFavorite = isFavorite;
+            starLabel.Text = isFavorite ? "★" : "☆";
+            starLabel.Visible = true;
+            FavoriteStatusChanged?.Invoke(this, this);
+        }
+
+        private void ToggleFavorite()
+        {
+            SetFavorite(!IsFavorite);
+        }
+
+        private void PlayerInfo_MouseDown(object sender, MouseEventArgs e)
+        {
             if (e.Button == MouseButtons.Left)
             {
-                playerInfo.DoDragDrop(playerInfo, DragDropEffects.Move);
-                if (selected)
-                {
-                    lblFavourite.Text = "Favourite";
-                }
-                else
-                {
-                    lblFavourite.Text = "Not Favourite";
-                }
+                this.DoDragDrop(this, DragDropEffects.Move);
+            }
+        }
+
+        private void PlayerInfo_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(PlayerInfo)))
+            {
+                e.Effect = DragDropEffects.Move;
+            }
+        }
+
+        private void PlayerInfo_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(PlayerInfo)))
+            {
+                PlayerInfo draggedPlayer = (PlayerInfo)e.Data.GetData(typeof(PlayerInfo));
+                // Handle the drop - this will be implemented in Form1
+            }
+        }
+
+        protected override void OnLayout(LayoutEventArgs levent)
+        {
+            base.OnLayout(levent);
+            if (starLabel != null)
+            {
+                starLabel.Location = new Point(lblPlayerName.Right + 5, lblPlayerName.Top);
             }
         }
     }

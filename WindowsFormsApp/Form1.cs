@@ -2,6 +2,7 @@ using DataLayer.DataHandling;
 using QuickType;
 using DataLayer.JsonModels;
 using System.Reflection;
+using System.Drawing.Printing;
 
 namespace WindowsFormsApp
 {
@@ -13,6 +14,9 @@ namespace WindowsFormsApp
 
         //Favourite List
         HashSet<string> userFavourites = new HashSet<string>();
+        private const int MAX_FAVORITE_PLAYERS = 3;
+        private List<PlayerInfo> favoritePlayers = new List<PlayerInfo>();
+
         public Form1()
         {
             InitializeComponent();
@@ -25,6 +29,108 @@ namespace WindowsFormsApp
 
             // Subscribe to ComboBox event ONCE
             cbChampionship.SelectedIndexChanged += CbChampionship_SelectedIndexChanged;
+
+            // Initialize panels for drag and drop
+            pnlPlayers.AllowDrop = true;
+            pnlPlayerFavourites.AllowDrop = true;
+            pnlPlayers.DragEnter += Panel_DragEnter;
+            pnlPlayerFavourites.DragEnter += Panel_DragEnter;
+            pnlPlayers.DragDrop += Panel_DragDrop;
+            pnlPlayerFavourites.DragDrop += Panel_DragDrop;
+
+            // Add keyboard shortcuts
+            this.KeyPreview = true;
+            this.KeyDown += Form1_KeyDown;
+
+            // Set panel properties
+            pnlPlayers.BorderStyle = BorderStyle.FixedSingle;
+            pnlPlayerFavourites.BorderStyle = BorderStyle.FixedSingle;
+            pnlPlayers.AutoScroll = true;
+            pnlPlayerFavourites.AutoScroll = true;
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                // Handle Enter key for confirmation dialogs
+                if (ActiveControl is Button btn && btn.DialogResult == DialogResult.OK)
+                {
+                    btn.PerformClick();
+                }
+            }
+            else if (e.KeyCode == Keys.Escape)
+            {
+                // Handle Escape key for cancellation
+                if (ActiveControl is Button btn && btn.DialogResult == DialogResult.Cancel)
+                {
+                    btn.PerformClick();
+                }
+            }
+        }
+
+        private void Panel_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(PlayerInfo)))
+            {
+                e.Effect = DragDropEffects.Move;
+            }
+        }
+
+        private void Panel_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(PlayerInfo)))
+            {
+                PlayerInfo draggedPlayer = (PlayerInfo)e.Data.GetData(typeof(PlayerInfo));
+                Panel targetPanel = (Panel)sender;
+                Panel sourcePanel = draggedPlayer.Parent as Panel;
+
+                if (sourcePanel != targetPanel)
+                {
+                    if (targetPanel == pnlPlayerFavourites && favoritePlayers.Count >= MAX_FAVORITE_PLAYERS)
+                    {
+                        MessageBox.Show($"You can only have {MAX_FAVORITE_PLAYERS} favorite players!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    sourcePanel.Controls.Remove(draggedPlayer);
+                    targetPanel.Controls.Add(draggedPlayer);
+
+                    // Calculate new position
+                    int yOffset = 10;
+                    foreach (Control control in targetPanel.Controls)
+                    {
+                        if (control != draggedPlayer)
+                        {
+                            yOffset += control.Height + 10;
+                        }
+                    }
+                    draggedPlayer.Location = new Point(10, yOffset);
+
+                    if (targetPanel == pnlPlayerFavourites)
+                    {
+                        favoritePlayers.Add(draggedPlayer);
+                        draggedPlayer.SetFavorite(true);
+                    }
+                    else
+                    {
+                        favoritePlayers.Remove(draggedPlayer);
+                        draggedPlayer.SetFavorite(false);
+                    }
+
+                    SaveFavorites();
+                }
+            }
+        }
+
+        private void SaveFavorites()
+        {
+            userFavourites.Clear();
+            foreach (var player in favoritePlayers)
+            {
+                userFavourites.Add(player.Player.Name);
+            }
+            FavouriteHandling.SaveFavourites(userFavourites);
         }
 
         private async void LoadPlayers(string country)
@@ -33,6 +139,7 @@ namespace WindowsFormsApp
             {
                 pnlPlayers.Controls.Clear();
                 pnlPlayerFavourites.Controls.Clear();
+                favoritePlayers.Clear();
 
                 HashSet<Matches> matches = await ApiDataHandling.LoadJsonMatches();
 
@@ -77,11 +184,122 @@ namespace WindowsFormsApp
                     playerInfo.Width = pnlPlayers.Width - 30;
                     pnlPlayers.Controls.Add(playerInfo);
                     yOffset += playerInfo.Height + 10;
+
+                    if (userFavourites.Contains(player.Name))
+                    {
+                        pnlPlayers.Controls.Remove(playerInfo);
+                        pnlPlayerFavourites.Controls.Add(playerInfo);
+                        playerInfo.SetFavorite(true);
+                        favoritePlayers.Add(playerInfo);
+                    }
                 }
+
+                UpdateRankings();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error loading players: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void UpdateRankings()
+        {
+            // Goals ranking
+            var goalsRanking = userRankedPlayerControlsList
+                .Where(e => e.TypeOfEvent == TypeOfEvent.Goal)
+                .GroupBy(e => e.Player)
+                .Select(g => new { Player = g.Key, Goals = g.Count() })
+                .OrderByDescending(x => x.Goals)
+                .ToList();
+
+            // Yellow cards ranking
+            var yellowCardsRanking = userRankedPlayerControlsList
+                .Where(e => e.TypeOfEvent == TypeOfEvent.YellowCard)
+                .GroupBy(e => e.Player)
+                .Select(g => new { Player = g.Key, Cards = g.Count() })
+                .OrderByDescending(x => x.Cards)
+                .ToList();
+
+            // Attendance ranking
+            var attendanceRanking = userRankedStadiumControlsList
+                .OrderByDescending(m => m.Attendance)
+                .ToList();
+
+            // Update UI with rankings
+            UpdateRankingList(lstGoalsRanking, goalsRanking, "Goals");
+            UpdateRankingList(lstYellowCardsRanking, yellowCardsRanking, "Yellow Cards");
+            UpdateAttendanceList(lstAttendanceRanking, attendanceRanking);
+        }
+
+        private void UpdateRankingList<T>(ListBox listBox, IEnumerable<T> ranking, string title)
+        {
+            listBox.Items.Clear();
+            listBox.Items.Add($"{title} Ranking:");
+            foreach (var item in ranking)
+            {
+                listBox.Items.Add(item.ToString());
+            }
+        }
+
+        private void UpdateAttendanceList(ListBox listBox, List<Matches> matches)
+        {
+            listBox.Items.Clear();
+            listBox.Items.Add("Attendance Ranking:");
+            foreach (var match in matches)
+            {
+                listBox.Items.Add($"{match.Location} - {match.Attendance} - {match.HomeTeam} vs {match.AwayTeam}");
+            }
+        }
+
+        private void btnPrintRankings_Click(object sender, EventArgs e)
+        {
+            PrintRankings();
+        }
+
+        private void PrintRankings()
+        {
+            PrintDocument pd = new PrintDocument();
+            pd.PrintPage += (sender, e) =>
+            {
+                float yPos = 50;
+                Font titleFont = new Font("Arial", 16, FontStyle.Bold);
+                Font contentFont = new Font("Arial", 12);
+
+                // Print Goals Ranking
+                e.Graphics.DrawString("Goals Ranking", titleFont, Brushes.Black, 50, yPos);
+                yPos += 30;
+                foreach (var item in lstGoalsRanking.Items)
+                {
+                    e.Graphics.DrawString(item.ToString(), contentFont, Brushes.Black, 50, yPos);
+                    yPos += 20;
+                }
+
+                // Print Yellow Cards Ranking
+                yPos += 30;
+                e.Graphics.DrawString("Yellow Cards Ranking", titleFont, Brushes.Black, 50, yPos);
+                yPos += 30;
+                foreach (var item in lstYellowCardsRanking.Items)
+                {
+                    e.Graphics.DrawString(item.ToString(), contentFont, Brushes.Black, 50, yPos);
+                    yPos += 20;
+                }
+
+                // Print Attendance Ranking
+                yPos += 30;
+                e.Graphics.DrawString("Attendance Ranking", titleFont, Brushes.Black, 50, yPos);
+                yPos += 30;
+                foreach (var item in lstAttendanceRanking.Items)
+                {
+                    e.Graphics.DrawString(item.ToString(), contentFont, Brushes.Black, 50, yPos);
+                    yPos += 20;
+                }
+            };
+
+            PrintDialog printDialog = new PrintDialog();
+            printDialog.Document = pd;
+            if (printDialog.ShowDialog() == DialogResult.OK)
+            {
+                pd.Print();
             }
         }
 

@@ -28,79 +28,83 @@
         /// </summary>
         private void InitializeComponent()
         {
-            lblPlayerName = new Label();
-            lblPlayerNumber = new Label();
-            lblPosition = new Label();
-            lblCaptain = new Label();
-            lblFavourite = new Label();
-            SuspendLayout();
+            this.lblPlayerName = new System.Windows.Forms.Label();
+            this.lblPlayerNumber = new System.Windows.Forms.Label();
+            this.lblPosition = new System.Windows.Forms.Label();
+            this.lblCaptain = new System.Windows.Forms.Label();
+            this.pictureBoxPlayer = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPlayer)).BeginInit();
+            this.SuspendLayout();
             // 
             // lblPlayerName
             // 
-            lblPlayerName.AutoSize = true;
-            lblPlayerName.Location = new Point(12, 13);
-            lblPlayerName.Name = "lblPlayerName";
-            lblPlayerName.Size = new Size(39, 15);
-            lblPlayerName.TabIndex = 0;
-            lblPlayerName.Text = "Name";
+            this.lblPlayerName.AutoSize = true;
+            this.lblPlayerName.Location = new System.Drawing.Point(60, 10);
+            this.lblPlayerName.Name = "lblPlayerName";
+            this.lblPlayerName.Size = new System.Drawing.Size(38, 15);
+            this.lblPlayerName.TabIndex = 0;
+            this.lblPlayerName.Text = "Name";
             // 
             // lblPlayerNumber
             // 
-            lblPlayerNumber.AutoSize = true;
-            lblPlayerNumber.Location = new Point(12, 45);
-            lblPlayerNumber.Name = "lblPlayerNumber";
-            lblPlayerNumber.Size = new Size(34, 15);
-            lblPlayerNumber.TabIndex = 1;
-            lblPlayerNumber.Text = "Num";
+            this.lblPlayerNumber.AutoSize = true;
+            this.lblPlayerNumber.Location = new System.Drawing.Point(60, 35);
+            this.lblPlayerNumber.Name = "lblPlayerNumber";
+            this.lblPlayerNumber.Size = new System.Drawing.Size(51, 15);
+            this.lblPlayerNumber.TabIndex = 1;
+            this.lblPlayerNumber.Text = "Number";
             // 
             // lblPosition
             // 
-            lblPosition.AutoSize = true;
-            lblPosition.Location = new Point(12, 76);
-            lblPosition.Name = "lblPosition";
-            lblPosition.Size = new Size(50, 15);
-            lblPosition.TabIndex = 2;
-            lblPosition.Text = "Position";
+            this.lblPosition.AutoSize = true;
+            this.lblPosition.Location = new System.Drawing.Point(60, 60);
+            this.lblPosition.Name = "lblPosition";
+            this.lblPosition.Size = new System.Drawing.Size(50, 15);
+            this.lblPosition.TabIndex = 2;
+            this.lblPosition.Text = "Position";
             // 
             // lblCaptain
             // 
-            lblCaptain.AutoSize = true;
-            lblCaptain.Location = new Point(107, 13);
-            lblCaptain.Name = "lblCaptain";
-            lblCaptain.Size = new Size(50, 15);
-            lblCaptain.TabIndex = 3;
-            lblCaptain.Text = "Kapetan";
+            this.lblCaptain.AutoSize = true;
+            this.lblCaptain.Location = new System.Drawing.Point(60, 85);
+            this.lblCaptain.Name = "lblCaptain";
+            this.lblCaptain.Size = new System.Drawing.Size(47, 15);
+            this.lblCaptain.TabIndex = 3;
+            this.lblCaptain.Text = "Captain";
             // 
-            // lblFavourite
+            // pictureBoxPlayer
             // 
-            lblFavourite.AutoSize = true;
-            lblFavourite.Location = new Point(107, 28);
-            lblFavourite.Name = "lblFavourite";
-            lblFavourite.Size = new Size(56, 15);
-            lblFavourite.TabIndex = 4;
-            lblFavourite.Text = "Favourite";
+            this.pictureBoxPlayer.Location = new System.Drawing.Point(10, 10);
+            this.pictureBoxPlayer.Name = "pictureBoxPlayer";
+            this.pictureBoxPlayer.Size = new System.Drawing.Size(40, 40);
+            this.pictureBoxPlayer.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxPlayer.TabIndex = 4;
+            this.pictureBoxPlayer.TabStop = false;
             // 
             // PlayerInfo
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(lblFavourite);
-            Controls.Add(lblCaptain);
-            Controls.Add(lblPosition);
-            Controls.Add(lblPlayerNumber);
-            Controls.Add(lblPlayerName);
-            Name = "PlayerInfo";
-            Size = new Size(300, 100);
-            ResumeLayout(false);
-            PerformLayout();
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.pictureBoxPlayer);
+            this.Controls.Add(this.lblCaptain);
+            this.Controls.Add(this.lblPosition);
+            this.Controls.Add(this.lblPlayerNumber);
+            this.Controls.Add(this.lblPlayerName);
+            this.Name = "PlayerInfo";
+            this.Size = new System.Drawing.Size(300, 110);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PlayerInfo_MouseDown);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPlayer)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
         }
 
         #endregion
 
-        private Label lblPlayerName;
-        private Label lblPlayerNumber;
-        private Label lblPosition;
-        private Label lblCaptain;
-        private Label lblFavourite;
+        private System.Windows.Forms.Label lblPlayerName;
+        private System.Windows.Forms.Label lblPlayerNumber;
+        private System.Windows.Forms.Label lblPosition;
+        private System.Windows.Forms.Label lblCaptain;
+        private System.Windows.Forms.PictureBox pictureBoxPlayer;
     }
 }
