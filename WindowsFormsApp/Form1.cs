@@ -127,48 +127,62 @@ namespace WindowsFormsApp
         {
             if (e.Data.GetDataPresent(typeof(PlayerInfo)))
             {
-                PlayerInfo draggedPlayer = (PlayerInfo)e.Data.GetData(typeof(PlayerInfo));
                 Panel targetPanel = (Panel)sender;
-                Panel sourcePanel = draggedPlayer.Parent as Panel;
+                PlayerInfo draggedPlayer = (PlayerInfo)e.Data.GetData(typeof(PlayerInfo));
+                Panel sourcePanel = (Panel)draggedPlayer.Parent;
 
-                if (sourcePanel != targetPanel)
+                // Get all selected players
+                var selectedPlayers = sourcePanel.Controls.OfType<PlayerInfo>()
+                    .Where(p => p.IsSelected)
+                    .ToList();
+
+                // If no players are selected, just use the dragged player
+                if (!selectedPlayers.Any())
                 {
-                    if (targetPanel == pnlPlayerFavourites && favoritePlayers.Count >= MAX_FAVORITE_PLAYERS)
+                    selectedPlayers.Add(draggedPlayer);
+                }
+
+                // Check if we're moving to favorites panel
+                bool isMovingToFavorites = targetPanel == pnlPlayerFavourites;
+                if (isMovingToFavorites)
+                {
+                    int currentFavorites = pnlPlayerFavourites.Controls.Count;
+                    int newFavorites = selectedPlayers.Count(p => !p.IsFavorite);
+                    if (currentFavorites + newFavorites > MAX_FAVORITE_PLAYERS)
                     {
-                        MessageBox.Show($"You can only have {MAX_FAVORITE_PLAYERS} favorite players!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show($"You can only have {MAX_FAVORITE_PLAYERS} favorite players!", 
+                            "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
-
-                    // Remove from source panel
-                    sourcePanel.Controls.Remove(draggedPlayer);
-                    
-                    // Add to target panel
-                    targetPanel.Controls.Add(draggedPlayer);
-                    draggedPlayer.Visible = true;
-                    draggedPlayer.BringToFront();
-
-                    // Update favorite status
-                    if (targetPanel == pnlPlayerFavourites)
-                    {
-                        favoritePlayers.Add(draggedPlayer);
-                        draggedPlayer.SetFavorite(true);
-                    }
-                    else
-                    {
-                        favoritePlayers.Remove(draggedPlayer);
-                        draggedPlayer.SetFavorite(false);
-                    }
-
-                    // Update layouts of both panels
-                    UpdatePanelLayout(sourcePanel);
-                    UpdatePanelLayout(targetPanel);
-
-                    // Force refresh
-                    sourcePanel.Refresh();
-                    targetPanel.Refresh();
-
-                    SaveFavorites();
                 }
+
+                // Move all selected players
+                foreach (var player in selectedPlayers)
+                {
+                    // Remove from source panel
+                    sourcePanel.Controls.Remove(player);
+                    // Add to target panel
+                    targetPanel.Controls.Add(player);
+                    // Update favorite status
+                    player.SetFavorite(isMovingToFavorites);
+                }
+
+                // Sort both panels
+                SortPanel(pnlPlayers);
+                SortPanel(pnlPlayerFavourites);
+
+                SaveFavorites();
+            }
+        }
+
+        private void SortPanel(Panel panel)
+        {
+            var players = panel.Controls.OfType<PlayerInfo>().ToList();
+            players.Sort((a, b) => string.Compare(a.Player.Name, b.Player.Name));
+            panel.Controls.Clear();
+            foreach (var player in players)
+            {
+                panel.Controls.Add(player);
             }
         }
 
@@ -229,6 +243,7 @@ namespace WindowsFormsApp
                     player.Name = playerName;
                     var playerInfo = new PlayerInfo(player);
                     playerInfo.Width = pnlPlayers.Width - 30;
+                    playerInfo.FavoriteStatusChanged += PlayerInfo_FavoriteStatusChanged;
 
                     // Check if player is in favorites
                     if (userFavourites.Contains(player.Name))
@@ -254,6 +269,43 @@ namespace WindowsFormsApp
             {
                 MessageBox.Show($"Error loading players: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void PlayerInfo_FavoriteStatusChanged(object sender, PlayerInfo playerInfo)
+        {
+            if (playerInfo.IsFavorite)
+            {
+                // Check if we're at the limit
+                if (pnlPlayerFavourites.Controls.Count >= MAX_FAVORITE_PLAYERS)
+                {
+                    MessageBox.Show($"You can only have {MAX_FAVORITE_PLAYERS} favorite players!", 
+                        "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    playerInfo.SetFavorite(false);
+                    return;
+                }
+
+                // Move to favorites panel
+                if (playerInfo.Parent == pnlPlayers)
+                {
+                    pnlPlayers.Controls.Remove(playerInfo);
+                    pnlPlayerFavourites.Controls.Add(playerInfo);
+                }
+            }
+            else
+            {
+                // Move back to players panel
+                if (playerInfo.Parent == pnlPlayerFavourites)
+                {
+                    pnlPlayerFavourites.Controls.Remove(playerInfo);
+                    pnlPlayers.Controls.Add(playerInfo);
+                }
+            }
+
+            // Sort both panels
+            SortPanel(pnlPlayers);
+            SortPanel(pnlPlayerFavourites);
+
+            SaveFavorites();
         }
 
         private void UpdateRankings()
