@@ -4,6 +4,7 @@ using DataLayer.JsonModels;
 using System.Reflection;
 using System.Drawing.Printing;
 using System.Diagnostics;
+using System.Linq;
 
 namespace WindowsFormsApp
 {
@@ -96,6 +97,24 @@ namespace WindowsFormsApp
             }
         }
 
+        private void UpdatePanelLayout(Panel panel)
+        {
+            // Sort controls by player number
+            var sortedControls = panel.Controls.Cast<PlayerInfo>()
+                .OrderBy(p => p.Player.ShirtNumber)
+                .ToList();
+
+            // Clear and re-add controls in sorted order
+            panel.Controls.Clear();
+            int yOffset = 10;
+            foreach (var control in sortedControls)
+            {
+                control.Location = new Point(10, yOffset);
+                panel.Controls.Add(control);
+                yOffset += control.Height + 10;
+            }
+        }
+
         private void Panel_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(typeof(PlayerInfo)))
@@ -120,20 +139,15 @@ namespace WindowsFormsApp
                         return;
                     }
 
+                    // Remove from source panel
                     sourcePanel.Controls.Remove(draggedPlayer);
+                    
+                    // Add to target panel
                     targetPanel.Controls.Add(draggedPlayer);
+                    draggedPlayer.Visible = true;
+                    draggedPlayer.BringToFront();
 
-                    // Calculate new position
-                    int yOffset = 10;
-                    foreach (Control control in targetPanel.Controls)
-                    {
-                        if (control != draggedPlayer)
-                        {
-                            yOffset += control.Height + 10;
-                        }
-                    }
-                    draggedPlayer.Location = new Point(10, yOffset);
-
+                    // Update favorite status
                     if (targetPanel == pnlPlayerFavourites)
                     {
                         favoritePlayers.Add(draggedPlayer);
@@ -144,6 +158,14 @@ namespace WindowsFormsApp
                         favoritePlayers.Remove(draggedPlayer);
                         draggedPlayer.SetFavorite(false);
                     }
+
+                    // Update layouts of both panels
+                    UpdatePanelLayout(sourcePanel);
+                    UpdatePanelLayout(targetPanel);
+
+                    // Force refresh
+                    sourcePanel.Refresh();
+                    targetPanel.Refresh();
 
                     SaveFavorites();
                 }
@@ -200,14 +222,12 @@ namespace WindowsFormsApp
                 }
 
                 var sortedPlayers = playerDict.Values.OrderBy(p => p.ShirtNumber).ToList();
-                int yOffset = 10;
                 foreach (var player in sortedPlayers)
                 {
                     string playerName = new System.Globalization.CultureInfo("en-US", false)
                         .TextInfo.ToTitleCase(player.Name.ToLower());
                     player.Name = playerName;
                     var playerInfo = new PlayerInfo(player);
-                    playerInfo.Location = new Point(10, yOffset);
                     playerInfo.Width = pnlPlayers.Width - 30;
 
                     // Check if player is in favorites
@@ -222,8 +242,11 @@ namespace WindowsFormsApp
                         pnlPlayers.Controls.Add(playerInfo);
                         playerInfo.SetFavorite(false);
                     }
-                    yOffset += playerInfo.Height + 10;
                 }
+
+                // Update layouts after adding all players
+                UpdatePanelLayout(pnlPlayers);
+                UpdatePanelLayout(pnlPlayerFavourites);
 
                 UpdateRankings();
             }

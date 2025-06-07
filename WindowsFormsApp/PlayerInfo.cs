@@ -27,9 +27,7 @@ namespace WindowsFormsApp
             InitializeContextMenu();
             InitializeStarLabel();
             SetData(player);
-            this.AllowDrop = true;
-            this.DragEnter += PlayerInfo_DragEnter;
-            this.DragDrop += PlayerInfo_DragDrop;
+            this.MouseDown += PlayerInfo_MouseDown;
         }
 
         private void InitializeContextMenu()
@@ -126,23 +124,6 @@ namespace WindowsFormsApp
             if (e.Button == MouseButtons.Left)
             {
                 this.DoDragDrop(this, DragDropEffects.Move);
-            }
-        }
-
-        private void PlayerInfo_DragEnter(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(typeof(PlayerInfo)))
-            {
-                e.Effect = DragDropEffects.Move;
-            }
-        }
-
-        private void PlayerInfo_DragDrop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(typeof(PlayerInfo)))
-            {
-                PlayerInfo draggedPlayer = (PlayerInfo)e.Data.GetData(typeof(PlayerInfo));
-                // Handle the drop - this will be implemented in Form1
             }
         }
 
