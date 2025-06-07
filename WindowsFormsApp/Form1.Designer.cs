@@ -28,109 +28,108 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.cbChampionship = new System.Windows.Forms.ComboBox();
-            this.pnlPlayers = new System.Windows.Forms.Panel();
-            this.pnlPlayerFavourites = new System.Windows.Forms.Panel();
-            this.lstGoalsRanking = new System.Windows.Forms.ListBox();
-            this.lstYellowCardsRanking = new System.Windows.Forms.ListBox();
-            this.lstAttendanceRanking = new System.Windows.Forms.ListBox();
-            this.btnPrintRankings = new System.Windows.Forms.Button();
-            this.btnOpenConfig = new System.Windows.Forms.Button();
+            cbChampionship = new ComboBox();
+            pnlPlayers = new Panel();
+            pnlPlayerFavourites = new Panel();
+            pnlGoalsRanking = new Panel();
+            pnlYellowCardsRanking = new Panel();
+            pnlAttendanceRanking = new Panel();
+            btnPrintRankings = new Button();
+            btnOpenConfig = new Button();
             SuspendLayout();
             // 
             // cbChampionship
             // 
-            this.cbChampionship.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbChampionship.FormattingEnabled = true;
-            this.cbChampionship.Location = new System.Drawing.Point(12, 12);
-            this.cbChampionship.Name = "cbChampionship";
-            this.cbChampionship.Size = new System.Drawing.Size(200, 23);
-            this.cbChampionship.TabIndex = 0;
+            cbChampionship.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbChampionship.FormattingEnabled = true;
+            cbChampionship.Location = new Point(12, 12);
+            cbChampionship.Name = "cbChampionship";
+            cbChampionship.Size = new Size(400, 23);
+            cbChampionship.TabIndex = 0;
             // 
             // pnlPlayers
             // 
-            this.pnlPlayers.AutoScroll = true;
-            this.pnlPlayers.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlPlayers.Location = new System.Drawing.Point(12, 41);
-            this.pnlPlayers.Name = "pnlPlayers";
-            this.pnlPlayers.Size = new System.Drawing.Size(300, 400);
-            this.pnlPlayers.TabIndex = 1;
+            pnlPlayers.AutoScroll = true;
+            pnlPlayers.BorderStyle = BorderStyle.FixedSingle;
+            pnlPlayers.Location = new Point(12, 41);
+            pnlPlayers.Name = "pnlPlayers";
+            pnlPlayers.Size = new Size(400, 747);
+            pnlPlayers.TabIndex = 1;
             // 
             // pnlPlayerFavourites
             // 
-            this.pnlPlayerFavourites.AutoScroll = true;
-            this.pnlPlayerFavourites.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlPlayerFavourites.Location = new System.Drawing.Point(318, 41);
-            this.pnlPlayerFavourites.Name = "pnlPlayerFavourites";
-            this.pnlPlayerFavourites.Size = new System.Drawing.Size(300, 400);
-            this.pnlPlayerFavourites.TabIndex = 2;
+            pnlPlayerFavourites.AutoScroll = true;
+            pnlPlayerFavourites.BorderStyle = BorderStyle.FixedSingle;
+            pnlPlayerFavourites.Location = new Point(418, 41);
+            pnlPlayerFavourites.Name = "pnlPlayerFavourites";
+            pnlPlayerFavourites.Size = new Size(400, 747);
+            pnlPlayerFavourites.TabIndex = 2;
             // 
-            // lstGoalsRanking
+            // pnlGoalsRanking
             // 
-            this.lstGoalsRanking.FormattingEnabled = true;
-            this.lstGoalsRanking.ItemHeight = 15;
-            this.lstGoalsRanking.Location = new System.Drawing.Point(624, 41);
-            this.lstGoalsRanking.Name = "lstGoalsRanking";
-            this.lstGoalsRanking.Size = new System.Drawing.Size(200, 124);
-            this.lstGoalsRanking.TabIndex = 3;
+            pnlGoalsRanking.AutoScroll = true;
+            pnlGoalsRanking.BorderStyle = BorderStyle.FixedSingle;
+            pnlGoalsRanking.Location = new Point(850, 12);
+            pnlGoalsRanking.Name = "pnlGoalsRanking";
+            pnlGoalsRanking.Size = new Size(338, 243);
+            pnlGoalsRanking.TabIndex = 0;
             // 
-            // lstYellowCardsRanking
+            // pnlYellowCardsRanking
             // 
-            this.lstYellowCardsRanking.FormattingEnabled = true;
-            this.lstYellowCardsRanking.ItemHeight = 15;
-            this.lstYellowCardsRanking.Location = new System.Drawing.Point(624, 171);
-            this.lstYellowCardsRanking.Name = "lstYellowCardsRanking";
-            this.lstYellowCardsRanking.Size = new System.Drawing.Size(200, 124);
-            this.lstYellowCardsRanking.TabIndex = 4;
+            pnlYellowCardsRanking.AutoScroll = true;
+            pnlYellowCardsRanking.BorderStyle = BorderStyle.FixedSingle;
+            pnlYellowCardsRanking.Location = new Point(850, 261);
+            pnlYellowCardsRanking.Name = "pnlYellowCardsRanking";
+            pnlYellowCardsRanking.Size = new Size(338, 303);
+            pnlYellowCardsRanking.TabIndex = 1;
             // 
-            // lstAttendanceRanking
+            // pnlAttendanceRanking
             // 
-            this.lstAttendanceRanking.FormattingEnabled = true;
-            this.lstAttendanceRanking.ItemHeight = 15;
-            this.lstAttendanceRanking.Location = new System.Drawing.Point(624, 301);
-            this.lstAttendanceRanking.Name = "lstAttendanceRanking";
-            this.lstAttendanceRanking.Size = new System.Drawing.Size(200, 124);
-            this.lstAttendanceRanking.TabIndex = 5;
+            pnlAttendanceRanking.AutoScroll = true;
+            pnlAttendanceRanking.BorderStyle = BorderStyle.FixedSingle;
+            pnlAttendanceRanking.Location = new Point(850, 570);
+            pnlAttendanceRanking.Name = "pnlAttendanceRanking";
+            pnlAttendanceRanking.Size = new Size(338, 204);
+            pnlAttendanceRanking.TabIndex = 2;
             // 
             // btnPrintRankings
             // 
-            this.btnPrintRankings.Location = new System.Drawing.Point(624, 431);
-            this.btnPrintRankings.Name = "btnPrintRankings";
-            this.btnPrintRankings.Size = new System.Drawing.Size(200, 23);
-            this.btnPrintRankings.TabIndex = 6;
-            this.btnPrintRankings.Text = "Print Rankings";
-            this.btnPrintRankings.UseVisualStyleBackColor = true;
-            this.btnPrintRankings.Click += new System.EventHandler(this.btnPrintRankings_Click);
+            btnPrintRankings.Location = new Point(850, 780);
+            btnPrintRankings.Name = "btnPrintRankings";
+            btnPrintRankings.Size = new Size(159, 23);
+            btnPrintRankings.TabIndex = 6;
+            btnPrintRankings.Text = "Print Rankings";
+            btnPrintRankings.UseVisualStyleBackColor = true;
+            btnPrintRankings.Click += btnPrintRankings_Click;
             // 
             // btnOpenConfig
             // 
-            this.btnOpenConfig.Location = new System.Drawing.Point(218, 12);
-            this.btnOpenConfig.Name = "btnOpenConfig";
-            this.btnOpenConfig.Size = new System.Drawing.Size(94, 23);
-            this.btnOpenConfig.TabIndex = 7;
-            this.btnOpenConfig.Text = "Settings";
-            this.btnOpenConfig.UseVisualStyleBackColor = true;
-            this.btnOpenConfig.Click += new System.EventHandler(this.btnOpenConfig_Click);
+            btnOpenConfig.Location = new Point(1053, 780);
+            btnOpenConfig.Name = "btnOpenConfig";
+            btnOpenConfig.Size = new Size(135, 23);
+            btnOpenConfig.TabIndex = 7;
+            btnOpenConfig.Text = "Settings";
+            btnOpenConfig.UseVisualStyleBackColor = true;
+            btnOpenConfig.Click += btnOpenConfig_Click;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(836, 466);
-            this.Controls.Add(this.btnOpenConfig);
-            this.Controls.Add(this.btnPrintRankings);
-            this.Controls.Add(this.lstAttendanceRanking);
-            this.Controls.Add(this.lstYellowCardsRanking);
-            this.Controls.Add(this.lstGoalsRanking);
-            this.Controls.Add(this.pnlPlayerFavourites);
-            this.Controls.Add(this.pnlPlayers);
-            this.Controls.Add(this.cbChampionship);
-            this.Name = "Form1";
-            this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
-            this.ResumeLayout(false);
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1200, 800);
+            Controls.Add(btnOpenConfig);
+            Controls.Add(btnPrintRankings);
+            Controls.Add(pnlAttendanceRanking);
+            Controls.Add(pnlYellowCardsRanking);
+            Controls.Add(pnlGoalsRanking);
+            Controls.Add(pnlPlayerFavourites);
+            Controls.Add(pnlPlayers);
+            Controls.Add(cbChampionship);
+            Name = "Form1";
+            Text = "Form1";
+            FormClosing += Form1_FormClosing;
+            Load += Form1_Load;
+            ResumeLayout(false);
         }
 
         #endregion
@@ -138,9 +137,9 @@
         private System.Windows.Forms.ComboBox cbChampionship;
         private System.Windows.Forms.Panel pnlPlayers;
         private System.Windows.Forms.Panel pnlPlayerFavourites;
-        private System.Windows.Forms.ListBox lstGoalsRanking;
-        private System.Windows.Forms.ListBox lstYellowCardsRanking;
-        private System.Windows.Forms.ListBox lstAttendanceRanking;
+        private System.Windows.Forms.Panel pnlGoalsRanking;
+        private System.Windows.Forms.Panel pnlYellowCardsRanking;
+        private System.Windows.Forms.Panel pnlAttendanceRanking;
         private System.Windows.Forms.Button btnPrintRankings;
         private System.Windows.Forms.Button btnOpenConfig;
     }

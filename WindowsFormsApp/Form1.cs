@@ -332,28 +332,79 @@ namespace WindowsFormsApp
                 .ToList();
 
             // Update UI with rankings
-            UpdateRankingList(lstGoalsRanking, goalsRanking, "Goals");
-            UpdateRankingList(lstYellowCardsRanking, yellowCardsRanking, "Yellow Cards");
-            UpdateAttendanceList(lstAttendanceRanking, attendanceRanking);
+            UpdateRankingList(pnlGoalsRanking, goalsRanking, "Goals");
+            UpdateRankingList(pnlYellowCardsRanking, yellowCardsRanking, "Yellow Cards");
+            UpdateAttendanceList(pnlAttendanceRanking, attendanceRanking);
         }
 
-        private void UpdateRankingList<T>(ListBox listBox, IEnumerable<T> ranking, string title)
+        private void UpdateRankingList<T>(Panel panel, IEnumerable<T> ranking, string title)
         {
-            listBox.Items.Clear();
-            listBox.Items.Add($"{title} Ranking:");
+            panel.Controls.Clear();
+            
+            // Add title
+            var titleLabel = new Label
+            {
+                Text = $"{title} Ranking:",
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(5, 5)
+            };
+            panel.Controls.Add(titleLabel);
+
+            // Add rank items
+            int yOffset = 30;
             foreach (var item in ranking)
             {
-                listBox.Items.Add(item.ToString());
+                string playerName = "";
+                int count = 0;
+
+                // Use type checking instead of dynamic
+                if (item is { } rankingItem)
+                {
+                    var properties = rankingItem.GetType().GetProperties();
+                    var playerProperty = properties.FirstOrDefault(p => p.Name == "Player");
+                    var countProperty = properties.FirstOrDefault(p => p.Name == "Goals" || p.Name == "Cards");
+
+                    if (playerProperty != null && countProperty != null)
+                    {
+                        playerName = playerProperty.GetValue(rankingItem)?.ToString() ?? "";
+                        count = Convert.ToInt32(countProperty.GetValue(rankingItem) ?? 0);
+                    }
+                }
+
+                var rankItem = new RankListItem(playerName, count);
+                rankItem.Location = new Point(5, yOffset);
+                panel.Controls.Add(rankItem);
+                yOffset += rankItem.Height + 5;
             }
         }
 
-        private void UpdateAttendanceList(ListBox listBox, List<Matches> matches)
+        private void UpdateAttendanceList(Panel panel, List<Matches> matches)
         {
-            listBox.Items.Clear();
-            listBox.Items.Add("Attendance Ranking:");
+            panel.Controls.Clear();
+
+            // Add title
+            var titleLabel = new Label
+            {
+                Text = "Attendance Ranking:",
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(5, 5)
+            };
+            panel.Controls.Add(titleLabel);
+
+            // Add match items
+            int yOffset = 30;
             foreach (var match in matches)
             {
-                listBox.Items.Add($"{match.Location} - {match.Attendance} - {match.HomeTeam} vs {match.AwayTeam}");
+                var matchItem = new Label
+                {
+                    Text = $"{match.Location} - {match.Attendance:N0} - {match.HomeTeam} vs {match.AwayTeam}",
+                    AutoSize = true,
+                    Location = new Point(5, yOffset)
+                };
+                panel.Controls.Add(matchItem);
+                yOffset += matchItem.Height + 5;
             }
         }
 
@@ -374,30 +425,39 @@ namespace WindowsFormsApp
                 // Print Goals Ranking
                 e.Graphics.DrawString("Goals Ranking", titleFont, Brushes.Black, 50, yPos);
                 yPos += 30;
-                foreach (var item in lstGoalsRanking.Items)
+                foreach (Control control in pnlGoalsRanking.Controls)
                 {
-                    e.Graphics.DrawString(item.ToString(), contentFont, Brushes.Black, 50, yPos);
-                    yPos += 20;
+                    if (control is RankListItem rankItem)
+                    {
+                        e.Graphics.DrawString($"{rankItem.Text} - Count: {rankItem.Count}", contentFont, Brushes.Black, 50, yPos);
+                        yPos += 20;
+                    }
                 }
 
                 // Print Yellow Cards Ranking
                 yPos += 30;
                 e.Graphics.DrawString("Yellow Cards Ranking", titleFont, Brushes.Black, 50, yPos);
                 yPos += 30;
-                foreach (var item in lstYellowCardsRanking.Items)
+                foreach (Control control in pnlYellowCardsRanking.Controls)
                 {
-                    e.Graphics.DrawString(item.ToString(), contentFont, Brushes.Black, 50, yPos);
-                    yPos += 20;
+                    if (control is RankListItem rankItem)
+                    {
+                        e.Graphics.DrawString($"{rankItem.Text} - Count: {rankItem.Count}", contentFont, Brushes.Black, 50, yPos);
+                        yPos += 20;
+                    }
                 }
 
                 // Print Attendance Ranking
                 yPos += 30;
                 e.Graphics.DrawString("Attendance Ranking", titleFont, Brushes.Black, 50, yPos);
                 yPos += 30;
-                foreach (var item in lstAttendanceRanking.Items)
+                foreach (Control control in pnlAttendanceRanking.Controls)
                 {
-                    e.Graphics.DrawString(item.ToString(), contentFont, Brushes.Black, 50, yPos);
-                    yPos += 20;
+                    if (control is Label label)
+                    {
+                        e.Graphics.DrawString(label.Text, contentFont, Brushes.Black, 50, yPos);
+                        yPos += 20;
+                    }
                 }
             };
 
