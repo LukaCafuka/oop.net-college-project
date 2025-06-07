@@ -55,19 +55,33 @@ namespace WindowsFormsApp
 
         public void SetData(string playerName, int count)
         {
+            if (string.IsNullOrEmpty(playerName)) return;
+
             this.playerNameLabel.Text = playerName;
             this.countLabel.Text = count.ToString("N0");
             this.Count = count;
+            LoadPlayerImage(playerName);
         }
 
         private void LoadPlayerImage(string playerName)
         {
             try
             {
+                if (string.IsNullOrEmpty(playerName)) return;
+
                 var image = imageManager.LoadPlayerImage(playerName);
                 if (image != null)
                 {
-                    this.playerImage.Image = image;
+                    if (playerImage.Image != null)
+                    {
+                        var oldImage = playerImage.Image;
+                        playerImage.Image = image;
+                        oldImage.Dispose();
+                    }
+                    else
+                    {
+                        playerImage.Image = image;
+                    }
                 }
             }
             catch (Exception)

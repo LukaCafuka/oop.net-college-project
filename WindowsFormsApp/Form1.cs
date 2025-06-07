@@ -367,15 +367,19 @@ namespace WindowsFormsApp
 
                     if (playerProperty != null && countProperty != null)
                     {
-                        playerName = playerProperty.GetValue(rankingItem)?.ToString() ?? "";
-                        count = Convert.ToInt32(countProperty.GetValue(rankingItem) ?? 0);
+                        var playerValue = playerProperty.GetValue(rankingItem);
+                        if (playerValue != null)
+                        {
+                            playerName = playerValue.ToString() ?? "";
+                            count = Convert.ToInt32(countProperty.GetValue(rankingItem) ?? 0);
+
+                            var rankItem = new RankListItem(playerName, count);
+                            rankItem.Location = new Point(5, yOffset);
+                            panel.Controls.Add(rankItem);
+                            yOffset += rankItem.Height + 5;
+                        }
                     }
                 }
-
-                var rankItem = new RankListItem(playerName, count);
-                rankItem.Location = new Point(5, yOffset);
-                panel.Controls.Add(rankItem);
-                yOffset += rankItem.Height + 5;
             }
         }
 
@@ -399,7 +403,7 @@ namespace WindowsFormsApp
             {
                 var matchItem = new Label
                 {
-                    Text = $"{match.Location} - {match.Attendance:N0} - {match.HomeTeam} vs {match.AwayTeam}",
+                    Text = $"{match.Location} - {match.Attendance:N0} - {match.HomeTeam.Country} vs {match.AwayTeam.Country}",
                     AutoSize = true,
                     Location = new Point(5, yOffset)
                 };
