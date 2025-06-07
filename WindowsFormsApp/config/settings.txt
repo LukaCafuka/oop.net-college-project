@@ -1,0 +1,7 @@
+language=Croatian
+gender=Male
+country=Korea Republic
+versusCountry=
+countryIndex=18
+versusCountryIndex=0
+resolution=

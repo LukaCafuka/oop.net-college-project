@@ -11,7 +11,7 @@ namespace DataLayer
         private const string API_JSON_DATA_DIR_NAME = "api-data";
         private const string CONFIG_DIR_NAME = "config";
 
-        private static string? MAIN_SAVE_DIR = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
+        private static string? MAIN_SAVE_DIR = Directory.GetCurrentDirectory();
 
         public static string? ConfigDir = Path.Combine(MAIN_SAVE_DIR, CONFIG_DIR_NAME);
         public static string? ConfigPath = Path.Combine(ConfigDir, "settings.txt");
