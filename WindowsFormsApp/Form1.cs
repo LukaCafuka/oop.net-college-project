@@ -209,16 +209,20 @@ namespace WindowsFormsApp
                     var playerInfo = new PlayerInfo(player);
                     playerInfo.Location = new Point(10, yOffset);
                     playerInfo.Width = pnlPlayers.Width - 30;
-                    pnlPlayers.Controls.Add(playerInfo);
-                    yOffset += playerInfo.Height + 10;
 
+                    // Check if player is in favorites
                     if (userFavourites.Contains(player.Name))
                     {
-                        pnlPlayers.Controls.Remove(playerInfo);
                         pnlPlayerFavourites.Controls.Add(playerInfo);
                         playerInfo.SetFavorite(true);
                         favoritePlayers.Add(playerInfo);
                     }
+                    else
+                    {
+                        pnlPlayers.Controls.Add(playerInfo);
+                        playerInfo.SetFavorite(false);
+                    }
+                    yOffset += playerInfo.Height + 10;
                 }
 
                 UpdateRankings();
@@ -338,10 +342,8 @@ namespace WindowsFormsApp
                 string selected = cbChampionship.SelectedItem.ToString();
                 string country = selected.Split('(')[0].Trim();
                 
-                // Save the selected index
+                // Only update the index for UI state, don't save to config
                 ConfigFile.countryIndex = cbChampionship.SelectedIndex;
-                ConfigFile.country = country;
-                ConfigHandling.SaveConfig();
                 
                 LoadPlayers(country);
             }
@@ -414,6 +416,18 @@ namespace WindowsFormsApp
             else
             {
                 e.Cancel = true;
+            }
+        }
+
+        private void btnOpenConfig_Click(object sender, EventArgs e)
+        {
+            using (var configForm = new ConfigForm())
+            {
+                if (configForm.ShowDialog() == DialogResult.OK)
+                {
+                    // Reload the championship data since settings might have changed
+                    LoadChampionship();
+                }
             }
         }
     }

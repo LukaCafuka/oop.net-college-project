@@ -124,7 +124,7 @@
     <value>Pošalji</value>
   </data>
   <data name="ChampionshipGroupBoxText" xml:space="preserve">
-    <value>Željeno prvenstvo</value>
+    <value>Odaberite prvenstvo</value>
   </data>
   <data name="CroatianLang" xml:space="preserve">
     <value>Hrvatski</value>
@@ -132,11 +132,14 @@
   <data name="EnglishLang" xml:space="preserve">
     <value>Engleski</value>
   </data>
+  <data name="FavoriteTeamGroupBoxText" xml:space="preserve">
+    <value>Odaberite omiljenu reprezentaciju</value>
+  </data>
   <data name="FemaleGender" xml:space="preserve">
     <value>Žensko</value>
   </data>
   <data name="LanguageGroupBoxText" xml:space="preserve">
-    <value>Odaberi jezik</value>
+    <value>Odaberite jezik</value>
   </data>
   <data name="MainFormTitle" xml:space="preserve">
     <value>Igrači</value>

@@ -132,6 +132,9 @@
   <data name="EnglishLang" xml:space="preserve">
     <value>English</value>
   </data>
+  <data name="FavoriteTeamGroupBoxText" xml:space="preserve">
+    <value>Choose your favorite team</value>
+  </data>
   <data name="FemaleGender" xml:space="preserve">
     <value>Female</value>
   </data>

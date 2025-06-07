@@ -1,7 +1,7 @@
-language=Croatian
+language=English
 gender=Male
-country=Korea Republic
+country=Croatia
 versusCountry=
-countryIndex=18
+countryIndex=11
 versusCountryIndex=0
 resolution=

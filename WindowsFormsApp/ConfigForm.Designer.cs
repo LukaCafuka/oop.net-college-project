@@ -35,8 +35,12 @@
             rbEnglishLangSelect = new RadioButton();
             rbCroatianLangSelect = new RadioButton();
             btnSubmitConfig = new Button();
+            gbFavoriteTeam = new GroupBox();
+            cbFavoriteTeam = new ComboBox();
+            lblFavoriteTeam = new Label();
             gbChampionshipSelection.SuspendLayout();
             gbLangSelection.SuspendLayout();
+            gbFavoriteTeam.SuspendLayout();
             SuspendLayout();
             // 
             // gbChampionshipSelection
@@ -120,12 +124,42 @@
             btnSubmitConfig.UseVisualStyleBackColor = true;
             btnSubmitConfig.Click += btnSubmitConfig_Click;
             // 
+            // gbFavoriteTeam
+            // 
+            gbFavoriteTeam.Controls.Add(cbFavoriteTeam);
+            gbFavoriteTeam.Controls.Add(lblFavoriteTeam);
+            gbFavoriteTeam.Location = new Point(45, 135);
+            gbFavoriteTeam.Name = "gbFavoriteTeam";
+            gbFavoriteTeam.Size = new Size(508, 60);
+            gbFavoriteTeam.TabIndex = 3;
+            gbFavoriteTeam.TabStop = false;
+            gbFavoriteTeam.Text = "Favorite Team";
+            // 
+            // cbFavoriteTeam
+            // 
+            cbFavoriteTeam.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbFavoriteTeam.FormattingEnabled = true;
+            cbFavoriteTeam.Location = new Point(6, 22);
+            cbFavoriteTeam.Name = "cbFavoriteTeam";
+            cbFavoriteTeam.Size = new Size(496, 23);
+            cbFavoriteTeam.TabIndex = 1;
+            cbFavoriteTeam.SelectedIndexChanged += cbFavoriteTeam_SelectedIndexChanged;
+            // 
+            // lblFavoriteTeam
+            // 
+            lblFavoriteTeam.AutoSize = true;
+            lblFavoriteTeam.Location = new Point(6, 24);
+            lblFavoriteTeam.Name = "lblFavoriteTeam";
+            lblFavoriteTeam.Size = new Size(0, 15);
+            lblFavoriteTeam.TabIndex = 0;
+            // 
             // ConfigForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(584, 261);
             ControlBox = false;
+            Controls.Add(gbFavoriteTeam);
             Controls.Add(btnSubmitConfig);
             Controls.Add(gbLangSelection);
             Controls.Add(gbChampionshipSelection);
@@ -136,6 +170,8 @@
             gbChampionshipSelection.PerformLayout();
             gbLangSelection.ResumeLayout(false);
             gbLangSelection.PerformLayout();
+            gbFavoriteTeam.ResumeLayout(false);
+            gbFavoriteTeam.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -148,5 +184,8 @@
         private RadioButton rbEnglishLangSelect;
         private RadioButton rbCroatianLangSelect;
         private Button btnSubmitConfig;
+        private GroupBox gbFavoriteTeam;
+        private ComboBox cbFavoriteTeam;
+        private Label lblFavoriteTeam;
     }
 }

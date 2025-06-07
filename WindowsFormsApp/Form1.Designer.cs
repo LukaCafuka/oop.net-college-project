@@ -36,6 +36,7 @@
             this.lstYellowCardsRanking = new System.Windows.Forms.ListBox();
             this.lstAttendanceRanking = new System.Windows.Forms.ListBox();
             this.btnPrintRankings = new System.Windows.Forms.Button();
+            this.btnOpenConfig = new System.Windows.Forms.Button();
             SuspendLayout();
             // 
             // cbChampionship
@@ -102,11 +103,22 @@
             this.btnPrintRankings.UseVisualStyleBackColor = true;
             this.btnPrintRankings.Click += new System.EventHandler(this.btnPrintRankings_Click);
             // 
+            // btnOpenConfig
+            // 
+            this.btnOpenConfig.Location = new System.Drawing.Point(218, 12);
+            this.btnOpenConfig.Name = "btnOpenConfig";
+            this.btnOpenConfig.Size = new System.Drawing.Size(94, 23);
+            this.btnOpenConfig.TabIndex = 7;
+            this.btnOpenConfig.Text = "Settings";
+            this.btnOpenConfig.UseVisualStyleBackColor = true;
+            this.btnOpenConfig.Click += new System.EventHandler(this.btnOpenConfig_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(836, 466);
+            this.Controls.Add(this.btnOpenConfig);
             this.Controls.Add(this.btnPrintRankings);
             this.Controls.Add(this.lstAttendanceRanking);
             this.Controls.Add(this.lstYellowCardsRanking);
@@ -130,5 +142,6 @@
         private System.Windows.Forms.ListBox lstYellowCardsRanking;
         private System.Windows.Forms.ListBox lstAttendanceRanking;
         private System.Windows.Forms.Button btnPrintRankings;
+        private System.Windows.Forms.Button btnOpenConfig;
     }
 }

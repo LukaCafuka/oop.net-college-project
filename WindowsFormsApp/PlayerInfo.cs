@@ -46,11 +46,12 @@ namespace WindowsFormsApp
             starLabel = new Label
             {
                 AutoSize = true,
-                Font = new Font("Segoe UI", 12, FontStyle.Bold),
-                Location = new Point(lblPlayerName.Right + 5, lblPlayerName.Top),
+                Font = new Font("Segoe UI", 14, FontStyle.Bold),
+                Location = new Point(lblPlayerName.Right + 5, lblPlayerName.Top - 2),
                 Text = "☆",
                 ForeColor = Color.Gold,
-                Visible = false
+                Visible = false,
+                BackColor = Color.Transparent
             };
             this.Controls.Add(starLabel);
         }
@@ -111,6 +112,7 @@ namespace WindowsFormsApp
             IsFavorite = isFavorite;
             starLabel.Text = isFavorite ? "★" : "☆";
             starLabel.Visible = true;
+            starLabel.BringToFront();
             FavoriteStatusChanged?.Invoke(this, this);
         }
 
@@ -149,7 +151,8 @@ namespace WindowsFormsApp
             base.OnLayout(levent);
             if (starLabel != null)
             {
-                starLabel.Location = new Point(lblPlayerName.Right + 5, lblPlayerName.Top);
+                starLabel.Location = new Point(lblPlayerName.Right + 5, lblPlayerName.Top - 2);
+                starLabel.BringToFront();
             }
         }
     }
