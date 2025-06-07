@@ -8,6 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using QuickType;
+using DataLayer.DataHandling;
+using DataLayer.JsonModels;
+using System.IO;
 
 namespace WindowsFormsApp
 {
@@ -18,6 +21,8 @@ namespace WindowsFormsApp
         public bool IsSelected { get; private set; }
         private ContextMenuStrip contextMenu;
         private Label starLabel;
+        private PictureBox playerImage;
+        private PlayerImageManager imageManager;
 
         public event EventHandler<PlayerInfo> FavoriteStatusChanged;
         public event EventHandler<PlayerInfo> SelectionChanged;
@@ -26,11 +31,115 @@ namespace WindowsFormsApp
         {
             InitializeComponent();
             Player = player;
+            imageManager = new PlayerImageManager();
             InitializeContextMenu();
             InitializeStarLabel();
+            InitializePlayerImage();
             SetData(player);
             this.MouseDown += PlayerInfo_MouseDown;
             this.MouseClick += PlayerInfo_MouseClick;
+        }
+
+        private void InitializePlayerImage()
+        {
+            playerImage = new PictureBox
+            {
+                Size = new Size(80, 80),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                Location = new Point(10, 10),
+                BorderStyle = BorderStyle.FixedSingle
+            };
+            playerImage.Click += PlayerImage_Click;
+            this.Controls.Add(playerImage);
+            LoadPlayerImage();
+        }
+
+        private void LoadPlayerImage()
+        {
+            try
+            {
+                // Load the image in a background task
+                Task.Run(() =>
+                {
+                    var newImage = imageManager.LoadPlayerImage(Player.Name);
+                    
+                    // Update the UI on the main thread
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        if (playerImage.Image != null)
+                        {
+                            var oldImage = playerImage.Image;
+                            playerImage.Image = newImage;
+                            oldImage.Dispose();
+                        }
+                        else
+                        {
+                            playerImage.Image = newImage;
+                        }
+                    });
+                });
+            }
+            catch (Exception)
+            {
+                // If image loading fails, it will use the default image
+            }
+        }
+
+        private void PlayerImage_Click(object sender, EventArgs e)
+        {
+            if (e is MouseEventArgs me && me.Button == MouseButtons.Right)
+            {
+                return; // Let the context menu handle it
+            }
+
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp";
+                openFileDialog.Title = "Select Player Image";
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        // Load and resize the image in a background task
+                        Task.Run(() =>
+                        {
+                            using (var originalImage = Image.FromFile(openFileDialog.FileName))
+                            {
+                                // Create a new bitmap for the resized image
+                                var resizedImage = new Bitmap(80, 80);
+                                using (var graphics = Graphics.FromImage(resizedImage))
+                                {
+                                    graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                                    graphics.DrawImage(originalImage, 0, 0, 80, 80);
+                                }
+
+                                // Save the image
+                                imageManager.SavePlayerImageAsync(Player.Name, resizedImage).Wait();
+
+                                // Update the UI on the main thread
+                                this.Invoke((MethodInvoker)delegate
+                                {
+                                    if (playerImage.Image != null)
+                                    {
+                                        var oldImage = playerImage.Image;
+                                        playerImage.Image = resizedImage;
+                                        oldImage.Dispose();
+                                    }
+                                    else
+                                    {
+                                        playerImage.Image = resizedImage;
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error loading image: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
         }
 
         private void InitializeContextMenu()
@@ -39,6 +148,11 @@ namespace WindowsFormsApp
             var favoriteMenuItem = new ToolStripMenuItem(IsFavorite ? "Remove from favorites" : "Set as favorite");
             favoriteMenuItem.Click += (s, e) => ToggleFavorite();
             contextMenu.Items.Add(favoriteMenuItem);
+
+            var changeImageMenuItem = new ToolStripMenuItem("Change Image");
+            changeImageMenuItem.Click += (s, e) => PlayerImage_Click(sender: null, e: EventArgs.Empty);
+            contextMenu.Items.Add(changeImageMenuItem);
+
             this.ContextMenuStrip = contextMenu;
         }
 
@@ -48,7 +162,7 @@ namespace WindowsFormsApp
             {
                 AutoSize = true,
                 Font = new Font("Segoe UI", 14, FontStyle.Bold),
-                Location = new Point(lblPlayerName.Right + 5, lblPlayerName.Top - 2),
+                Location = new Point(this.Width - 30, 5),
                 Text = "☆",
                 ForeColor = Color.Gold,
                 Visible = false,
@@ -59,53 +173,11 @@ namespace WindowsFormsApp
 
         private void SetData(StartingEleven player)
         {
-            lblPlayerName.Text = player.Name;
-            lblPlayerNumber.Text = player.ShirtNumber.ToString();
+            lblName.Text = player.Name;
+            lblShirtNumber.Text = player.ShirtNumber.ToString();
             lblPosition.Text = player.Position.ToString();
-            lblCaptain.Text = player.Captain ? "Captain" : " ";
-
-            // Load player image
-            string imagesDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "assets", "images", "players");
-            string defaultImagePath = Path.Combine(imagesDir, "default_player.png");
-            string playerImagePath = Path.Combine(imagesDir, $"{player.Name}.png");
-
-            try
-            {
-                if (File.Exists(playerImagePath))
-                {
-                    pictureBoxPlayer.Image = Image.FromFile(playerImagePath);
-                }
-                else if (File.Exists(defaultImagePath))
-                {
-                    pictureBoxPlayer.Image = Image.FromFile(defaultImagePath);
-                }
-                else
-                {
-                    // Create a default image if none exists
-                    using (Bitmap bmp = new Bitmap(40, 40))
-                    {
-                        using (Graphics g = Graphics.FromImage(bmp))
-                        {
-                            g.Clear(Color.LightGray);
-                            g.DrawString("?", new Font("Arial", 20), Brushes.Black, 15, 5);
-                        }
-                        pictureBoxPlayer.Image = new Bitmap(bmp);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // If there's an error loading the image, create a default one
-                using (Bitmap bmp = new Bitmap(40, 40))
-                {
-                    using (Graphics g = Graphics.FromImage(bmp))
-                    {
-                        g.Clear(Color.LightGray);
-                        g.DrawString("?", new Font("Arial", 20), Brushes.Black, 15, 5);
-                    }
-                    pictureBoxPlayer.Image = new Bitmap(bmp);
-                }
-            }
+            lblCaptain.Text = player.Captain ? "C" : "";
+            lblCaptain.Visible = player.Captain;
         }
 
         private void ToggleFavorite()
@@ -183,8 +255,7 @@ namespace WindowsFormsApp
             base.OnLayout(levent);
             if (starLabel != null)
             {
-                starLabel.Location = new Point(lblPlayerName.Right + 5, lblPlayerName.Top - 2);
-                starLabel.BringToFront();
+                starLabel.Location = new Point(this.Width - 30, 5);
             }
         }
     }

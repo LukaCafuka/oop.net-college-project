@@ -28,83 +28,71 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lblPlayerName = new System.Windows.Forms.Label();
-            this.lblPlayerNumber = new System.Windows.Forms.Label();
+            this.lblName = new System.Windows.Forms.Label();
             this.lblPosition = new System.Windows.Forms.Label();
+            this.lblShirtNumber = new System.Windows.Forms.Label();
             this.lblCaptain = new System.Windows.Forms.Label();
-            this.pictureBoxPlayer = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPlayer)).BeginInit();
             this.SuspendLayout();
             // 
-            // lblPlayerName
+            // lblName
             // 
-            this.lblPlayerName.AutoSize = true;
-            this.lblPlayerName.Location = new System.Drawing.Point(60, 10);
-            this.lblPlayerName.Name = "lblPlayerName";
-            this.lblPlayerName.Size = new System.Drawing.Size(38, 15);
-            this.lblPlayerName.TabIndex = 0;
-            this.lblPlayerName.Text = "Name";
-            // 
-            // lblPlayerNumber
-            // 
-            this.lblPlayerNumber.AutoSize = true;
-            this.lblPlayerNumber.Location = new System.Drawing.Point(60, 35);
-            this.lblPlayerNumber.Name = "lblPlayerNumber";
-            this.lblPlayerNumber.Size = new System.Drawing.Size(51, 15);
-            this.lblPlayerNumber.TabIndex = 1;
-            this.lblPlayerNumber.Text = "Number";
+            this.lblName.AutoSize = true;
+            this.lblName.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblName.Location = new System.Drawing.Point(100, 10);
+            this.lblName.Name = "lblName";
+            this.lblName.Size = new System.Drawing.Size(39, 15);
+            this.lblName.TabIndex = 0;
+            this.lblName.Text = "Name";
             // 
             // lblPosition
             // 
             this.lblPosition.AutoSize = true;
-            this.lblPosition.Location = new System.Drawing.Point(60, 60);
+            this.lblPosition.Location = new System.Drawing.Point(100, 35);
             this.lblPosition.Name = "lblPosition";
             this.lblPosition.Size = new System.Drawing.Size(50, 15);
-            this.lblPosition.TabIndex = 2;
+            this.lblPosition.TabIndex = 1;
             this.lblPosition.Text = "Position";
+            // 
+            // lblShirtNumber
+            // 
+            this.lblShirtNumber.AutoSize = true;
+            this.lblShirtNumber.Location = new System.Drawing.Point(100, 60);
+            this.lblShirtNumber.Name = "lblShirtNumber";
+            this.lblShirtNumber.Size = new System.Drawing.Size(13, 15);
+            this.lblShirtNumber.TabIndex = 2;
+            this.lblShirtNumber.Text = "#";
             // 
             // lblCaptain
             // 
             this.lblCaptain.AutoSize = true;
-            this.lblCaptain.Location = new System.Drawing.Point(60, 85);
+            this.lblCaptain.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblCaptain.Location = new System.Drawing.Point(150, 60);
             this.lblCaptain.Name = "lblCaptain";
-            this.lblCaptain.Size = new System.Drawing.Size(47, 15);
+            this.lblCaptain.Size = new System.Drawing.Size(14, 15);
             this.lblCaptain.TabIndex = 3;
-            this.lblCaptain.Text = "Captain";
-            // 
-            // pictureBoxPlayer
-            // 
-            this.pictureBoxPlayer.Location = new System.Drawing.Point(10, 10);
-            this.pictureBoxPlayer.Name = "pictureBoxPlayer";
-            this.pictureBoxPlayer.Size = new System.Drawing.Size(40, 40);
-            this.pictureBoxPlayer.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxPlayer.TabIndex = 4;
-            this.pictureBoxPlayer.TabStop = false;
+            this.lblCaptain.Text = "C";
+            this.lblCaptain.Visible = false;
             // 
             // PlayerInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Controls.Add(this.pictureBoxPlayer);
             this.Controls.Add(this.lblCaptain);
+            this.Controls.Add(this.lblShirtNumber);
             this.Controls.Add(this.lblPosition);
-            this.Controls.Add(this.lblPlayerNumber);
-            this.Controls.Add(this.lblPlayerName);
+            this.Controls.Add(this.lblName);
             this.Name = "PlayerInfo";
-            this.Size = new System.Drawing.Size(300, 110);
-            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PlayerInfo_MouseDown);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPlayer)).EndInit();
+            this.Size = new System.Drawing.Size(200, 100);
             this.ResumeLayout(false);
             this.PerformLayout();
         }
 
         #endregion
 
-        private System.Windows.Forms.Label lblPlayerName;
-        private System.Windows.Forms.Label lblPlayerNumber;
+        private System.Windows.Forms.Label lblName;
         private System.Windows.Forms.Label lblPosition;
+        private System.Windows.Forms.Label lblShirtNumber;
         private System.Windows.Forms.Label lblCaptain;
-        private System.Windows.Forms.PictureBox pictureBoxPlayer;
     }
 }
