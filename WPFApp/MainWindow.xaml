@@ -51,5 +51,13 @@
 
         <!-- Settings Button -->
         <Button x:Name="btnOpenSettings" Grid.Row="3" Grid.Column="3" Content="Settings" Width="100" Height="35" Margin="0,30,0,0" Click="btnOpenSettings_Click"/>
+
+        <!-- Football field and lineup display -->
+        <Border Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" Margin="0,30,0,0" CornerRadius="10" BorderBrush="Gray" BorderThickness="1">
+            <Grid>
+                <Image Source="https://upload.wikimedia.org/wikipedia/commons/6/60/Soccer_Field_Transparant.png" Stretch="Fill"/>
+                <Canvas x:Name="canvasField" Background="Transparent"/>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

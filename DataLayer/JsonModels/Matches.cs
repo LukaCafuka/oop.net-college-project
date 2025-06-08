@@ -115,55 +115,55 @@
         public string? Country { get; set; }
 
         [JsonProperty("attempts_on_goal")]
-        public long AttemptsOnGoal { get; set; }
+        public long? AttemptsOnGoal { get; set; }
 
         [JsonProperty("on_target")]
-        public long OnTarget { get; set; }
+        public long? OnTarget { get; set; }
 
         [JsonProperty("off_target")]
-        public long OffTarget { get; set; }
+        public long? OffTarget { get; set; }
 
         [JsonProperty("blocked")]
-        public long Blocked { get; set; }
+        public long? Blocked { get; set; }
 
         [JsonProperty("woodwork")]
-        public long Woodwork { get; set; }
+        public long? Woodwork { get; set; }
 
         [JsonProperty("corners")]
-        public long Corners { get; set; }
+        public long? Corners { get; set; }
 
         [JsonProperty("offsides")]
-        public long Offsides { get; set; }
+        public long? Offsides { get; set; }
 
         [JsonProperty("ball_possession")]
-        public long BallPossession { get; set; }
+        public long? BallPossession { get; set; }
 
         [JsonProperty("pass_accuracy")]
-        public long PassAccuracy { get; set; }
+        public long? PassAccuracy { get; set; }
 
         [JsonProperty("num_passes")]
-        public long NumPasses { get; set; }
+        public long? NumPasses { get; set; }
 
         [JsonProperty("passes_completed")]
-        public long PassesCompleted { get; set; }
+        public long? PassesCompleted { get; set; }
 
         [JsonProperty("distance_covered")]
-        public long DistanceCovered { get; set; }
+        public long? DistanceCovered { get; set; }
 
         [JsonProperty("balls_recovered")]
-        public long BallsRecovered { get; set; }
+        public long? BallsRecovered { get; set; }
 
         [JsonProperty("tackles")]
-        public long Tackles { get; set; }
+        public long? Tackles { get; set; }
 
         [JsonProperty("clearances")]
-        public long Clearances { get; set; }
+        public long? Clearances { get; set; }
 
         [JsonProperty("yellow_cards")]
-        public long YellowCards { get; set; }
+        public long? YellowCards { get; set; }
 
         [JsonProperty("red_cards")]
-        public long RedCards { get; set; }
+        public long? RedCards { get; set; }
 
         [JsonProperty("fouls_committed")]
         public long? FoulsCommitted { get; set; }
@@ -505,8 +505,11 @@
                     return StageName.RoundOf16;
                 case "Semi-finals":
                     return StageName.SemiFinals;
+                default:
+                    // Fallback for unknown values, logs can be added here if needed
+                    // Example: System.Diagnostics.Debug.WriteLine($"Unknown StageName: {value}");
+                    return StageName.FirstStage;
             }
-            throw new Exception("Cannot unmarshal type StageName");
         }
 
         public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)

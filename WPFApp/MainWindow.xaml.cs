@@ -69,6 +69,7 @@ namespace WPFApp
             ConfigFile.country = _selectedFavorite?.Country;
             PopulateOpponentComboBox();
             UpdateResultLabel();
+            DrawLineups();
         }
 
         private void PopulateOpponentComboBox()
@@ -99,6 +100,7 @@ namespace WPFApp
             _selectedOpponent = cbOpponentTeam.SelectedItem as TeamResults;
             ConfigFile.versusCountry = _selectedOpponent?.Country;
             UpdateResultLabel();
+            DrawLineups();
         }
 
         private void UpdateResultLabel()
@@ -181,6 +183,82 @@ namespace WPFApp
                     Width = 1920;
                     Height = 1080;
                     break;
+            }
+        }
+
+        private void DrawLineups()
+        {
+            canvasField.Children.Clear();
+            if (_selectedFavorite == null || _selectedOpponent == null) return;
+
+            // Find the match between the two teams
+            var match = _matches.FirstOrDefault(m =>
+                (m.HomeTeamCountry == _selectedFavorite.Country && m.AwayTeamCountry == _selectedOpponent.Country) ||
+                (m.HomeTeamCountry == _selectedOpponent.Country && m.AwayTeamCountry == _selectedFavorite.Country));
+            if (match == null) return;
+
+            // Determine which team is home/away
+            bool favoriteIsHome = match.HomeTeamCountry == _selectedFavorite.Country;
+            var favoriteStats = favoriteIsHome ? match.HomeTeamStatistics : match.AwayTeamStatistics;
+            var opponentStats = favoriteIsHome ? match.AwayTeamStatistics : match.HomeTeamStatistics;
+
+            DrawTeamLineup(favoriteStats?.StartingEleven, true);
+            DrawTeamLineup(opponentStats?.StartingEleven, false);
+        }
+
+        private void DrawTeamLineup(StartingEleven[]? players, bool isHomeTeam)
+        {
+            if (players == null) return;
+            // Define Y positions for each role
+            var yPositions = new Dictionary<Position, double>
+            {
+                { Position.Goalie, 180 },
+                { Position.Defender, 120 },
+                { Position.Midfield, 70 },
+                { Position.Forward, 20 }
+            };
+            // Flip for away team
+            if (!isHomeTeam)
+            {
+                yPositions = yPositions.ToDictionary(kv => kv.Key, kv => 400 - kv.Value);
+            }
+            // Group by position
+            var grouped = players.GroupBy(p => p.Position);
+            foreach (var group in grouped)
+            {
+                double y = yPositions[group.Key];
+                double xStart = isHomeTeam ? 60 : 340;
+                double xStep = 60;
+                int i = 0;
+                foreach (var player in group)
+                {
+                    var control = new PlayerControl
+                    {
+                        Name = player.Name,
+                        ShirtNumber = player.ShirtNumber.ToString(),
+                        PlayerImage = GetPlayerImage(player.Name)
+                    };
+                    Canvas.SetLeft(control, xStart + i * xStep);
+                    Canvas.SetTop(control, y);
+                    canvasField.Children.Add(control);
+                    i++;
+                }
+            }
+        }
+
+        private ImageSource GetPlayerImage(string playerName)
+        {
+            // Try to load an image from Resources/Players/{playerName}.png, fallback to a default
+            try
+            {
+                string safeName = playerName.Replace(' ', '_');
+                string path = $"pack://application:,,,/Resources/Players/{safeName}.png";
+                return new BitmapImage(new Uri(path));
+            }
+            catch
+            {
+                // Use a generic footballer icon (online PNG)
+                return new BitmapImage(new Uri("https://cdn-icons-png.flaticon.com/512/616/616494.png"));
             }
         }
     }

@@ -26,7 +26,9 @@ namespace QuickType
                 case "Sunny":
                     return Description.Sunny;
                 default:
-                    throw new Exception($"Cannot unmarshal type Description: {value}");
+                    // Fallback for unknown values, logs can be added here if needed
+                    // Example: System.Diagnostics.Debug.WriteLine($"Unknown Description: {value}");
+                    return Description.Cloudy;
             }
         }
 
