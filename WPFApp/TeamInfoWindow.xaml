@@ -1,0 +1,51 @@
+<Window x:Class="WPFApp.TeamInfoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Team Info" Height="350" Width="400" WindowStartupLocation="CenterScreen" AllowsTransparency="True" Background="Transparent" WindowStyle="None">
+    <Border CornerRadius="10" Background="White" Padding="20">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.5"/>
+        </Border.Effect>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="txtTitle" FontSize="22" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+            <Grid Grid.Row="1" Margin="0,0,0,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="FIFA Code:" Grid.Row="0" Grid.Column="0"/>
+                <TextBlock x:Name="txtFifaCode" Grid.Row="0" Grid.Column="1"/>
+                <TextBlock Text="Games Played:" Grid.Row="1" Grid.Column="0"/>
+                <TextBlock x:Name="txtGamesPlayed" Grid.Row="1" Grid.Column="1"/>
+                <TextBlock Text="Wins:" Grid.Row="2" Grid.Column="0"/>
+                <TextBlock x:Name="txtWins" Grid.Row="2" Grid.Column="1"/>
+                <TextBlock Text="Draws:" Grid.Row="3" Grid.Column="0"/>
+                <TextBlock x:Name="txtDraws" Grid.Row="3" Grid.Column="1"/>
+                <TextBlock Text="Losses:" Grid.Row="4" Grid.Column="0"/>
+                <TextBlock x:Name="txtLosses" Grid.Row="4" Grid.Column="1"/>
+                <TextBlock Text="Goals For:" Grid.Row="5" Grid.Column="0"/>
+                <TextBlock x:Name="txtGoalsFor" Grid.Row="5" Grid.Column="1"/>
+                <TextBlock Text="Goals Against:" Grid.Row="6" Grid.Column="0"/>
+                <TextBlock x:Name="txtGoalsAgainst" Grid.Row="6" Grid.Column="1"/>
+                <TextBlock Text="Goal Difference:" Grid.Row="7" Grid.Column="0"/>
+                <TextBlock x:Name="txtGoalDiff" Grid.Row="7" Grid.Column="1"/>
+            </Grid>
+            <Button Content="Close" Grid.Row="2" Width="80" Height="30" HorizontalAlignment="Center" Click="BtnClose_Click"/>
+        </Grid>
+    </Border>
+</Window> 
