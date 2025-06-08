@@ -1,0 +1,77 @@
+<Window x:Class="WPFApp.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Settings" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanMinimize">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Initial Settings" 
+                   FontSize="24" 
+                   FontWeight="Bold" 
+                   Margin="0,0,0,20"/>
+
+        <ScrollViewer Grid.Row="1" Margin="0,10" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <GroupBox Header="{DynamicResource ChampionshipGroupBoxText}" Margin="0,0,0,20">
+                    <StackPanel Margin="10">
+                        <RadioButton x:Name="rbMale" 
+                                     Content="{DynamicResource MaleGender}" 
+                                     Margin="0,5"
+                                     Checked="rbGender_Checked"/>
+                        <RadioButton x:Name="rbFemale" 
+                                     Content="{DynamicResource FemaleGender}" 
+                                     Margin="0,5"
+                                     Checked="rbGender_Checked"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="{DynamicResource LanguageGroupBoxText}" Margin="0,0,0,20">
+                    <StackPanel Margin="10">
+                        <RadioButton x:Name="rbCroatian" 
+                                     Content="{DynamicResource CroatianLang}" 
+                                     Margin="0,5"
+                                     Checked="rbLanguage_Checked"/>
+                        <RadioButton x:Name="rbEnglish" 
+                                     Content="{DynamicResource EnglishLang}" 
+                                     Margin="0,5"
+                                     Checked="rbLanguage_Checked"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Window Resolution" Margin="0,0,0,20">
+                    <StackPanel Margin="10">
+                        <RadioButton x:Name="rbFullscreen" 
+                                     Content="Fullscreen" 
+                                     Margin="0,5"
+                                     Checked="rbResolution_Checked"/>
+                        <RadioButton x:Name="rbResolution1" 
+                                     Content="1280 x 720" 
+                                     Margin="0,5"
+                                     Checked="rbResolution_Checked"/>
+                        <RadioButton x:Name="rbResolution2" 
+                                     Content="1600 x 900" 
+                                     Margin="0,5"
+                                     Checked="rbResolution_Checked"/>
+                        <RadioButton x:Name="rbResolution3" 
+                                     Content="1920 x 1080" 
+                                     Margin="0,5"
+                                     Checked="rbResolution_Checked"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Button Grid.Row="2" 
+                Content="{DynamicResource ButtonSubmit}" 
+                Click="SaveSettings_Click"
+                HorizontalAlignment="Right"
+                Padding="20,10"
+                Margin="0,20,0,0"/>
+    </Grid>
+</Window> 

@@ -1,0 +1,7 @@
+language=English
+gender=Male
+country=
+versusCountry=
+countryIndex=0
+versusCountryIndex=0
+resolution=1600 x 900
