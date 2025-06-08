@@ -209,27 +209,27 @@ namespace WPFApp
         private void DrawTeamLineup(StartingEleven[]? players, bool isHomeTeam)
         {
             if (players == null) return;
-            // Define Y positions for each role
-            var yPositions = new Dictionary<Position, double>
-            {
-                { Position.Goalie, 180 },
-                { Position.Defender, 120 },
-                { Position.Midfield, 70 },
-                { Position.Forward, 20 }
-            };
-            // Flip for away team
-            if (!isHomeTeam)
-            {
-                yPositions = yPositions.ToDictionary(kv => kv.Key, kv => 400 - kv.Value);
-            }
-            // Group by position
-            var grouped = players.GroupBy(p => p.Position);
-            foreach (var group in grouped)
+            // Define Y positions for each role (for 800x400 field)
+            var yPositions = isHomeTeam
+                ? new Dictionary<Position, double> {
+                    { Position.Goalie, 350 },
+                    { Position.Defender, 280 },
+                    { Position.Midfield, 200 },
+                    { Position.Forward, 120 }
+                }
+                : new Dictionary<Position, double> {
+                    { Position.Goalie, 50 },
+                    { Position.Defender, 120 },
+                    { Position.Midfield, 200 },
+                    { Position.Forward, 280 }
+                };
+
+            foreach (var group in players.GroupBy(p => p.Position))
             {
                 double y = yPositions[group.Key];
-                double xStart = isHomeTeam ? 60 : 340;
-                double xStep = 60;
-                int i = 0;
+                int count = group.Count();
+                double xStep = 800.0 / (count + 1);
+                int i = 1;
                 foreach (var player in group)
                 {
                     var control = new PlayerControl
@@ -238,7 +238,8 @@ namespace WPFApp
                         ShirtNumber = player.ShirtNumber.ToString(),
                         PlayerImage = GetPlayerImage(player.Name)
                     };
-                    Canvas.SetLeft(control, xStart + i * xStep);
+                    double x = xStep * i;
+                    Canvas.SetLeft(control, x - 20); // Center the control
                     Canvas.SetTop(control, y);
                     canvasField.Children.Add(control);
                     i++;

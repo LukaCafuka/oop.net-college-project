@@ -54,10 +54,14 @@
 
         <!-- Football field and lineup display -->
         <Border Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" Margin="0,30,0,0" CornerRadius="10" BorderBrush="Gray" BorderThickness="1">
-            <Grid>
-                <Image Source="https://upload.wikimedia.org/wikipedia/commons/6/60/Soccer_Field_Transparant.png" Stretch="Fill"/>
-                <Canvas x:Name="canvasField" Background="Transparent"/>
-            </Grid>
+            <Viewbox Stretch="Uniform">
+                <Grid Width="800" Height="400">
+                    <Image Source="pack://application:,,,/WPFApp;component/Resources/field.jpg" Stretch="Fill" Width="800" Height="400"/>
+                    <Canvas x:Name="canvasField" Width="800" Height="400" Background="Transparent">
+                        <Line X1="400" Y1="0" X2="400" Y2="400" Stroke="White" StrokeThickness="3" StrokeDashArray="5,5"/>
+                    </Canvas>
+                </Grid>
+            </Viewbox>
         </Border>
     </Grid>
 </Window>

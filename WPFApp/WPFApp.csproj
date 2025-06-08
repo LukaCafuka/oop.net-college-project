@@ -42,4 +42,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Resource Include="Resources\field.jpg" />
+  </ItemGroup>
+
 </Project>
