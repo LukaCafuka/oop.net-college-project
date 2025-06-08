@@ -151,6 +151,12 @@ namespace WPFApp
             }
         }
 
+        private void btnOpenSettings_Click(object sender, RoutedEventArgs e)
+        {
+            var win = new SettingsWindow();
+            win.Show();
+        }
+
         private void ApplyResolution()
         {
             if (string.IsNullOrEmpty(ConfigFile.resolution))
