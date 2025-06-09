@@ -1,7 +1,7 @@
 language=Croatian
 gender=Male
-country=Uruguay
-versusCountry=Russia
+country=Belgium
+versusCountry=Croatia
 countryIndex=0
 versusCountryIndex=0
 resolution=1280 x 720

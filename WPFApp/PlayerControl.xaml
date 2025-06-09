@@ -8,6 +8,6 @@
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
         <Image Width="32" Height="32" Source="{Binding PlayerImage}" Stretch="UniformToFill" />
         <TextBlock Text="{Binding ShirtNumber}" FontWeight="Bold" FontSize="11" HorizontalAlignment="Center"/>
-        <TextBlock Text="{Binding Name}" FontSize="9" HorizontalAlignment="Center" TextWrapping="Wrap" Width="60"/>
+        <TextBlock Text="{Binding PlayerName}" FontSize="9" HorizontalAlignment="Center" TextWrapping="Wrap" Width="60"/>
     </StackPanel>
 </UserControl> 

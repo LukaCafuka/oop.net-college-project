@@ -2,6 +2,6 @@ language=English
 gender=Male
 country=Croatia
 versusCountry=
-countryIndex=11
+countryIndex=1
 versusCountryIndex=0
 resolution=

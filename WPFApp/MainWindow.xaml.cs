@@ -202,11 +202,11 @@ namespace WPFApp
             var favoriteStats = favoriteIsHome ? match.HomeTeamStatistics : match.AwayTeamStatistics;
             var opponentStats = favoriteIsHome ? match.AwayTeamStatistics : match.HomeTeamStatistics;
 
-            DrawTeamLineup(favoriteStats?.StartingEleven, true);
-            DrawTeamLineup(opponentStats?.StartingEleven, false);
+            DrawTeamLineup(favoriteStats?.StartingEleven, true, match, favoriteIsHome);
+            DrawTeamLineup(opponentStats?.StartingEleven, false, match, !favoriteIsHome);
         }
 
-        private void DrawTeamLineup(StartingEleven[]? players, bool isHomeTeam)
+        private void DrawTeamLineup(StartingEleven[]? players, bool isHomeTeam, Matches match, bool isHomeTeamInMatch)
         {
             if (players == null) return;
             // Y positions for each role (for 800x400 field)
@@ -217,6 +217,9 @@ namespace WPFApp
                 { Position.Midfield, 200 },
                 { Position.Forward, isHomeTeam ? 120 : 280 }
             };
+
+            // Get team events
+            var teamEvents = isHomeTeamInMatch ? match.HomeTeamEvents : match.AwayTeamEvents;
 
             foreach (var group in players.GroupBy(p => p.Position))
             {
@@ -231,9 +234,12 @@ namespace WPFApp
                 {
                     var control = new PlayerControl
                     {
-                        Name = player.Name,
+                        PlayerName = player.Name,
                         ShirtNumber = player.ShirtNumber.ToString(),
-                        PlayerImage = GetPlayerImage(player.Name)
+                        PlayerImage = GetPlayerImage(player.Name),
+                        PlayerData = player,
+                        Goals = GetPlayerGoals(player.Name, teamEvents),
+                        YellowCards = GetPlayerYellowCards(player.Name, teamEvents)
                     };
                     double x = xStart + xStep * i;
                     Canvas.SetLeft(control, x - 20); // Center the control
@@ -242,6 +248,18 @@ namespace WPFApp
                     i++;
                 }
             }
+        }
+
+        private int GetPlayerGoals(string playerName, TeamEvent[]? events)
+        {
+            if (events == null) return 0;
+            return events.Count(e => e.TypeOfEvent == TypeOfEvent.Goal && e.Player == playerName);
+        }
+
+        private int GetPlayerYellowCards(string playerName, TeamEvent[]? events)
+        {
+            if (events == null) return 0;
+            return events.Count(e => e.TypeOfEvent == TypeOfEvent.YellowCard && e.Player == playerName);
         }
 
         private ImageSource GetPlayerImage(string playerName)
