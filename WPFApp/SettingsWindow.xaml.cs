@@ -143,11 +143,13 @@ namespace WPFApp
             {
                 ConfigFile.language = "Croatian";
                 CultureHandling.SetCulture("hr-HR");
+                LocalizationHelper.Instance.ChangeLanguage("hr-HR");
             }
             else if (rbEnglish.IsChecked == true)
             {
                 ConfigFile.language = "English";
                 CultureHandling.SetCulture("en-US");
+                LocalizationHelper.Instance.ChangeLanguage("en-US");
             }
         }
 

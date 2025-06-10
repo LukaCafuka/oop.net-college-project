@@ -1,7 +1,8 @@
 <Window x:Class="WPFApp.TeamInfoWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Team Info" Height="350" Width="400" WindowStartupLocation="CenterScreen" AllowsTransparency="True" Background="Transparent" WindowStyle="None">
+        xmlns:local="clr-namespace:WPFApp"
+        Title="{Binding Source={x:Static local:LocalizationHelper.Instance}, Path=TeamInfoWindowTitle}" Height="350" Width="400" WindowStartupLocation="CenterScreen" AllowsTransparency="True" Background="Transparent" WindowStyle="None">
     <Border CornerRadius="10" Background="White" Padding="20">
         <Border.Effect>
             <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.5"/>
@@ -28,24 +29,24 @@
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="FIFA Code:" Grid.Row="0" Grid.Column="0"/>
+                <TextBlock Text="{Binding Source={x:Static local:LocalizationHelper.Instance}, Path=FifaCodeLabel}" Grid.Row="0" Grid.Column="0"/>
                 <TextBlock x:Name="txtFifaCode" Grid.Row="0" Grid.Column="1"/>
-                <TextBlock Text="Games Played:" Grid.Row="1" Grid.Column="0"/>
+                <TextBlock Text="{Binding Source={x:Static local:LocalizationHelper.Instance}, Path=GamesPlayedLabel}" Grid.Row="1" Grid.Column="0"/>
                 <TextBlock x:Name="txtGamesPlayed" Grid.Row="1" Grid.Column="1"/>
-                <TextBlock Text="Wins:" Grid.Row="2" Grid.Column="0"/>
+                <TextBlock Text="{Binding Source={x:Static local:LocalizationHelper.Instance}, Path=WinsLabel}" Grid.Row="2" Grid.Column="0"/>
                 <TextBlock x:Name="txtWins" Grid.Row="2" Grid.Column="1"/>
-                <TextBlock Text="Draws:" Grid.Row="3" Grid.Column="0"/>
+                <TextBlock Text="{Binding Source={x:Static local:LocalizationHelper.Instance}, Path=DrawsLabel}" Grid.Row="3" Grid.Column="0"/>
                 <TextBlock x:Name="txtDraws" Grid.Row="3" Grid.Column="1"/>
-                <TextBlock Text="Losses:" Grid.Row="4" Grid.Column="0"/>
+                <TextBlock Text="{Binding Source={x:Static local:LocalizationHelper.Instance}, Path=LossesLabel}" Grid.Row="4" Grid.Column="0"/>
                 <TextBlock x:Name="txtLosses" Grid.Row="4" Grid.Column="1"/>
-                <TextBlock Text="Goals For:" Grid.Row="5" Grid.Column="0"/>
+                <TextBlock Text="{Binding Source={x:Static local:LocalizationHelper.Instance}, Path=GoalsForLabel}" Grid.Row="5" Grid.Column="0"/>
                 <TextBlock x:Name="txtGoalsFor" Grid.Row="5" Grid.Column="1"/>
-                <TextBlock Text="Goals Against:" Grid.Row="6" Grid.Column="0"/>
+                <TextBlock Text="{Binding Source={x:Static local:LocalizationHelper.Instance}, Path=GoalsAgainstLabel}" Grid.Row="6" Grid.Column="0"/>
                 <TextBlock x:Name="txtGoalsAgainst" Grid.Row="6" Grid.Column="1"/>
-                <TextBlock Text="Goal Difference:" Grid.Row="7" Grid.Column="0"/>
+                <TextBlock Text="{Binding Source={x:Static local:LocalizationHelper.Instance}, Path=GoalDifferenceLabel}" Grid.Row="7" Grid.Column="0"/>
                 <TextBlock x:Name="txtGoalDiff" Grid.Row="7" Grid.Column="1"/>
             </Grid>
-            <Button Content="Close" Grid.Row="2" Width="80" Height="30" HorizontalAlignment="Center" Click="BtnClose_Click"/>
+            <Button Content="{Binding Source={x:Static local:LocalizationHelper.Instance}, Path=CloseButton}" Grid.Row="2" Width="80" Height="30" HorizontalAlignment="Center" Click="BtnClose_Click"/>
         </Grid>
     </Border>
 </Window> 

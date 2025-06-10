@@ -32,7 +32,7 @@ namespace WPFApp
             txtName.Text = player.Name;
             txtNumber.Text = player.ShirtNumber.ToString();
             txtPosition.Text = player.Position.ToString();
-            txtCaptain.Text = player.Captain ? "Yes" : "No";
+            txtCaptain.Text = player.Captain ? LocalizationHelper.Instance.YesText : LocalizationHelper.Instance.NoText;
             txtGoals.Text = goals.ToString();
             txtYellowCards.Text = yellowCards.ToString();
 

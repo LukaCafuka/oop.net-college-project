@@ -79,4 +79,94 @@
   <data name="ButtonSubmit" xml:space="preserve">
     <value>Save Settings</value>
   </data>
+  <data name="MainWindowTitle" xml:space="preserve">
+    <value>Football World Cup</value>
+  </data>
+  <data name="FavoriteTeamLabel" xml:space="preserve">
+    <value>Favorite Team:</value>
+  </data>
+  <data name="OpponentTeamLabel" xml:space="preserve">
+    <value>Opponent Team:</value>
+  </data>
+  <data name="InfoButton" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="SettingsButton" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="SettingsWindowTitle" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="InitialSettingsTitle" xml:space="preserve">
+    <value>Initial Settings</value>
+  </data>
+  <data name="WindowResolutionGroupBox" xml:space="preserve">
+    <value>Window Resolution</value>
+  </data>
+  <data name="FavoriteCountryGroupBox" xml:space="preserve">
+    <value>Favorite Country</value>
+  </data>
+  <data name="OpponentCountryGroupBox" xml:space="preserve">
+    <value>Opponent Country</value>
+  </data>
+  <data name="PlayerInfoWindowTitle" xml:space="preserve">
+    <value>Player Information</value>
+  </data>
+  <data name="AddChangeImageButton" xml:space="preserve">
+    <value>Add/Change Image</value>
+  </data>
+  <data name="NameLabel" xml:space="preserve">
+    <value>Name:</value>
+  </data>
+  <data name="NumberLabel" xml:space="preserve">
+    <value>Number:</value>
+  </data>
+  <data name="PositionLabel" xml:space="preserve">
+    <value>Position:</value>
+  </data>
+  <data name="CaptainLabel" xml:space="preserve">
+    <value>Captain:</value>
+  </data>
+  <data name="GoalsLabel" xml:space="preserve">
+    <value>Goals:</value>
+  </data>
+  <data name="YellowCardsLabel" xml:space="preserve">
+    <value>Yellow Cards:</value>
+  </data>
+  <data name="TeamInfoWindowTitle" xml:space="preserve">
+    <value>Team Info</value>
+  </data>
+  <data name="FifaCodeLabel" xml:space="preserve">
+    <value>FIFA Code:</value>
+  </data>
+  <data name="GamesPlayedLabel" xml:space="preserve">
+    <value>Games Played:</value>
+  </data>
+  <data name="WinsLabel" xml:space="preserve">
+    <value>Wins:</value>
+  </data>
+  <data name="DrawsLabel" xml:space="preserve">
+    <value>Draws:</value>
+  </data>
+  <data name="LossesLabel" xml:space="preserve">
+    <value>Losses:</value>
+  </data>
+  <data name="GoalsForLabel" xml:space="preserve">
+    <value>Goals For:</value>
+  </data>
+  <data name="GoalsAgainstLabel" xml:space="preserve">
+    <value>Goals Against:</value>
+  </data>
+  <data name="GoalDifferenceLabel" xml:space="preserve">
+    <value>Goal Difference:</value>
+  </data>
+  <data name="CloseButton" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="YesText" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="NoText" xml:space="preserve">
+    <value>No</value>
+  </data>
 </root> 

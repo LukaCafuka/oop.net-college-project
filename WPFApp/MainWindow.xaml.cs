@@ -33,6 +33,19 @@ namespace WPFApp
             InitializeComponent();
             ApplyResolution();
             Loaded += MainWindow_Loaded;
+            
+            // Subscribe to language changes
+            LocalizationHelper.Instance.PropertyChanged += (s, e) => 
+            {
+                // Force refresh of all bound properties
+                if (string.IsNullOrEmpty(e.PropertyName))
+                {
+                    // Re-bind the data context to refresh all bindings
+                    var temp = DataContext;
+                    DataContext = null;
+                    DataContext = temp;
+                }
+            };
         }
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)

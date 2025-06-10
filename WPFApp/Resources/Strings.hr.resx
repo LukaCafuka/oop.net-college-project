@@ -79,4 +79,94 @@
   <data name="ButtonSubmit" xml:space="preserve">
     <value>Spremi Postavke</value>
   </data>
+  <data name="MainWindowTitle" xml:space="preserve">
+    <value>Nogometno Svjetsko Prvenstvo</value>
+  </data>
+  <data name="FavoriteTeamLabel" xml:space="preserve">
+    <value>Omiljeni Tim:</value>
+  </data>
+  <data name="OpponentTeamLabel" xml:space="preserve">
+    <value>Protivnički Tim:</value>
+  </data>
+  <data name="InfoButton" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="SettingsButton" xml:space="preserve">
+    <value>Postavke</value>
+  </data>
+  <data name="SettingsWindowTitle" xml:space="preserve">
+    <value>Postavke</value>
+  </data>
+  <data name="InitialSettingsTitle" xml:space="preserve">
+    <value>Početne Postavke</value>
+  </data>
+  <data name="WindowResolutionGroupBox" xml:space="preserve">
+    <value>Rezolucija Prozora</value>
+  </data>
+  <data name="FavoriteCountryGroupBox" xml:space="preserve">
+    <value>Omiljena Zemlja</value>
+  </data>
+  <data name="OpponentCountryGroupBox" xml:space="preserve">
+    <value>Protivnička Zemlja</value>
+  </data>
+  <data name="PlayerInfoWindowTitle" xml:space="preserve">
+    <value>Informacije o Igraču</value>
+  </data>
+  <data name="AddChangeImageButton" xml:space="preserve">
+    <value>Dodaj/Promijeni Sliku</value>
+  </data>
+  <data name="NameLabel" xml:space="preserve">
+    <value>Ime:</value>
+  </data>
+  <data name="NumberLabel" xml:space="preserve">
+    <value>Broj:</value>
+  </data>
+  <data name="PositionLabel" xml:space="preserve">
+    <value>Pozicija:</value>
+  </data>
+  <data name="CaptainLabel" xml:space="preserve">
+    <value>Kapetan:</value>
+  </data>
+  <data name="GoalsLabel" xml:space="preserve">
+    <value>Golovi:</value>
+  </data>
+  <data name="YellowCardsLabel" xml:space="preserve">
+    <value>Žuti Kartoni:</value>
+  </data>
+  <data name="TeamInfoWindowTitle" xml:space="preserve">
+    <value>Informacije o Timu</value>
+  </data>
+  <data name="FifaCodeLabel" xml:space="preserve">
+    <value>FIFA Kod:</value>
+  </data>
+  <data name="GamesPlayedLabel" xml:space="preserve">
+    <value>Odigrane Utakmice:</value>
+  </data>
+  <data name="WinsLabel" xml:space="preserve">
+    <value>Pobjede:</value>
+  </data>
+  <data name="DrawsLabel" xml:space="preserve">
+    <value>Neriješeno:</value>
+  </data>
+  <data name="LossesLabel" xml:space="preserve">
+    <value>Porazi:</value>
+  </data>
+  <data name="GoalsForLabel" xml:space="preserve">
+    <value>Golovi Za:</value>
+  </data>
+  <data name="GoalsAgainstLabel" xml:space="preserve">
+    <value>Golovi Protiv:</value>
+  </data>
+  <data name="GoalDifferenceLabel" xml:space="preserve">
+    <value>Gol Razlika:</value>
+  </data>
+  <data name="CloseButton" xml:space="preserve">
+    <value>Zatvori</value>
+  </data>
+  <data name="YesText" xml:space="preserve">
+    <value>Da</value>
+  </data>
+  <data name="NoText" xml:space="preserve">
+    <value>Ne</value>
+  </data>
 </root> 
