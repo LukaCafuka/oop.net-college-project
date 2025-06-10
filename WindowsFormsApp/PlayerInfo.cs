@@ -61,22 +61,45 @@ namespace WindowsFormsApp
                 // Load the image in a background task
                 Task.Run(() =>
                 {
-                    var newImage = imageManager.LoadPlayerImage(Player.Name);
-                    
-                    // Update the UI on the main thread
-                    this.Invoke((MethodInvoker)delegate
+                    try
                     {
-                        if (playerImage.Image != null)
+                        var newImage = imageManager.LoadPlayerImage(Player.Name);
+                        
+                        // Update the UI on the main thread
+                        if (!this.IsDisposed && !this.Disposing)
                         {
-                            var oldImage = playerImage.Image;
-                            playerImage.Image = newImage;
-                            oldImage.Dispose();
+                            this.Invoke((MethodInvoker)delegate
+                            {
+                                if (!this.IsDisposed && !this.Disposing && playerImage != null && !playerImage.IsDisposed)
+                                {
+                                    if (playerImage.Image != null)
+                                    {
+                                        var oldImage = playerImage.Image;
+                                        playerImage.Image = newImage;
+                                        oldImage.Dispose();
+                                    }
+                                    else
+                                    {
+                                        playerImage.Image = newImage;
+                                    }
+                                }
+                                else
+                                {
+                                    // If the control is disposed, dispose the new image
+                                    newImage?.Dispose();
+                                }
+                            });
                         }
                         else
                         {
-                            playerImage.Image = newImage;
+                            // If the control is disposed, dispose the new image
+                            newImage?.Dispose();
                         }
-                    });
+                    }
+                    catch (Exception)
+                    {
+                        // If image loading fails, it will use the default image
+                    }
                 });
             }
             catch (Exception)
@@ -239,14 +262,22 @@ namespace WindowsFormsApp
         public void SetFavorite(bool isFavorite)
         {
             IsFavorite = isFavorite;
-            starLabel.Text = isFavorite ? "★" : "☆";
-            starLabel.Visible = true;
-            starLabel.BringToFront();
-
-            // Update context menu text
+            starLabel.Visible = isFavorite;
             if (contextMenu.Items.Count > 0)
             {
-                contextMenu.Items[0].Text = isFavorite ? "Remove from favorites" : "Set as favorite";
+                ((ToolStripMenuItem)contextMenu.Items[0]).Text = isFavorite ? "Remove from favorites" : "Set as favorite";
+            }
+        }
+
+        public void UpdateLabels()
+        {
+            if (Player != null)
+            {
+                lblName.Text = $"{CultureHandling.GetString("NameLabel")}: {Player.Name}";
+                lblShirtNumber.Text = $"{CultureHandling.GetString("NumberLabel")}: {Player.ShirtNumber}";
+                lblPosition.Text = $"{CultureHandling.GetString("PositionLabel")}: {Player.Position}";
+                lblCaptain.Text = Player.Captain ? CultureHandling.GetString("CaptainLabel") : "";
+                lblCaptain.Visible = Player.Captain;
             }
         }
 
@@ -260,3 +291,5 @@ namespace WindowsFormsApp
         }
     }
 }
+
+

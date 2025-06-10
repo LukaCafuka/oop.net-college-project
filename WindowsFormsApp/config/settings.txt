@@ -1,6 +1,6 @@
 language=English
 gender=Male
-country=Croatia
+country=Denmark
 versusCountry=
 countryIndex=2
 versusCountryIndex=0

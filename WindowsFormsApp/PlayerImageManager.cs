@@ -10,11 +10,13 @@ namespace WindowsFormsApp
     {
         private const string IMAGES_DIR = "Resources/PlayerImages";
         private const string DEFAULT_IMAGE_PATH = "Resources/PlayerImages/default_player.png";
+        private static Image defaultImage;
 
         public PlayerImageManager()
         {
             EnsureDirectoryExists();
             EnsureDefaultImageExists();
+            LoadDefaultImage();
         }
 
         private void EnsureDirectoryExists()
@@ -30,6 +32,29 @@ namespace WindowsFormsApp
             if (!File.Exists(DEFAULT_IMAGE_PATH))
             {
                 CreateDefaultImage();
+            }
+        }
+
+        private void LoadDefaultImage()
+        {
+            try
+            {
+                if (defaultImage == null)
+                {
+                    using (var stream = new FileStream(DEFAULT_IMAGE_PATH, FileMode.Open, FileAccess.Read))
+                    {
+                        defaultImage = new Bitmap(Image.FromStream(stream));
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // If loading fails, create a new default image
+                CreateDefaultImage();
+                using (var stream = new FileStream(DEFAULT_IMAGE_PATH, FileMode.Open, FileAccess.Read))
+                {
+                    defaultImage = new Bitmap(Image.FromStream(stream));
+                }
             }
         }
 
@@ -66,19 +91,13 @@ namespace WindowsFormsApp
                         return new Bitmap(Image.FromStream(stream));
                     }
                 }
-                // Create a copy of the default image
-                using (var stream = new FileStream(DEFAULT_IMAGE_PATH, FileMode.Open, FileAccess.Read))
-                {
-                    return new Bitmap(Image.FromStream(stream));
-                }
+                // Return a copy of the default image
+                return new Bitmap(defaultImage);
             }
             catch (Exception)
             {
                 // If there's any error, return a copy of the default image
-                using (var stream = new FileStream(DEFAULT_IMAGE_PATH, FileMode.Open, FileAccess.Read))
-                {
-                    return new Bitmap(Image.FromStream(stream));
-                }
+                return new Bitmap(defaultImage);
             }
         }
 

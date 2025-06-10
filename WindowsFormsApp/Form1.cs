@@ -66,6 +66,9 @@ namespace WindowsFormsApp
                 pnlPlayers.AutoScroll = true;
                 pnlPlayerFavourites.AutoScroll = true;
 
+                // Update control texts
+                UpdateControlTexts();
+
                 Debug.WriteLine("Form1: Initialization complete");
             }
             catch (Exception ex)
@@ -340,10 +343,17 @@ namespace WindowsFormsApp
         {
             panel.Controls.Clear();
             
+            // Map title to resource key
+            string resourceKey = title switch
+            {
+                "Goals" => "GoalsRankingPanelTitle",
+                "Yellow Cards" => "YellowCardsRankingPanelTitle",
+                _ => "RankingsPanelTitle"
+            };
             // Add title
             var titleLabel = new Label
             {
-                Text = $"{title} Ranking:",
+                Text = $"{CultureHandling.GetString(resourceKey)}:",
                 Font = new Font("Segoe UI", 10, FontStyle.Bold),
                 AutoSize = true,
                 Location = new Point(5, 5)
@@ -389,7 +399,7 @@ namespace WindowsFormsApp
             // Add title
             var titleLabel = new Label
             {
-                Text = "Attendance Ranking:",
+                Text = $"{CultureHandling.GetString("AttendancePanelTitle")}:",
                 Font = new Font("Segoe UI", 10, FontStyle.Bold),
                 AutoSize = true,
                 Location = new Point(5, 5)
@@ -537,7 +547,7 @@ namespace WindowsFormsApp
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.Text = CultureHandling.GetString("MainFormTitle");
+            UpdateControlTexts();
             LoadChampionship();
             // Do not call LoadPlayers here, it will be called by ComboBox selection
         }
@@ -565,6 +575,40 @@ namespace WindowsFormsApp
                 {
                     // Reload the championship data since settings might have changed
                     LoadChampionship();
+                }
+            }
+        }
+
+        private void UpdateControlTexts()
+        {
+            // Update form title
+            this.Text = CultureHandling.GetString("MainFormTitle");
+
+            // Update panel titles
+            pnlPlayers.Text = CultureHandling.GetString("PlayersPanelTitle");
+            pnlPlayerFavourites.Text = CultureHandling.GetString("FavoritesPanelTitle");
+            pnlGoalsRanking.Text = CultureHandling.GetString("GoalsRankingPanelTitle");
+            pnlYellowCardsRanking.Text = CultureHandling.GetString("YellowCardsRankingPanelTitle");
+            pnlAttendanceRanking.Text = CultureHandling.GetString("AttendancePanelTitle");
+
+            // Update button texts
+            btnPrintRankings.Text = CultureHandling.GetString("PrintButtonText");
+            btnOpenConfig.Text = CultureHandling.GetString("SettingsButtonText");
+
+            // Update player info labels
+            foreach (Control control in pnlPlayers.Controls)
+            {
+                if (control is PlayerInfo playerInfo)
+                {
+                    playerInfo.UpdateLabels();
+                }
+            }
+
+            foreach (Control control in pnlPlayerFavourites.Controls)
+            {
+                if (control is PlayerInfo playerInfo)
+                {
+                    playerInfo.UpdateLabels();
                 }
             }
         }

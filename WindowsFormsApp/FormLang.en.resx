@@ -147,4 +147,52 @@
   <data name="MaleGender" xml:space="preserve">
     <value>Male</value>
   </data>
+  <data name="PlayersPanelTitle" xml:space="preserve">
+    <value>Players</value>
+  </data>
+  <data name="FavoritesPanelTitle" xml:space="preserve">
+    <value>Favorite Players</value>
+  </data>
+  <data name="RankingsPanelTitle" xml:space="preserve">
+    <value>Rankings</value>
+  </data>
+  <data name="AttendancePanelTitle" xml:space="preserve">
+    <value>Match Attendance</value>
+  </data>
+  <data name="PrintButtonText" xml:space="preserve">
+    <value>Print Rankings</value>
+  </data>
+  <data name="SettingsButtonText" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="PlayerNameLabel" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="PlayerNumberLabel" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="PlayerPositionLabel" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="PlayerCaptainLabel" xml:space="preserve">
+    <value>Captain</value>
+  </data>
+  <data name="ContextMenuFavorite" xml:space="preserve">
+    <value>Set as favorite</value>
+  </data>
+  <data name="ContextMenuRemoveFavorite" xml:space="preserve">
+    <value>Remove from favorites</value>
+  </data>
+  <data name="ContextMenuChangeImage" xml:space="preserve">
+    <value>Change Image</value>
+  </data>
+  <data name="MaxFavoritesWarning" xml:space="preserve">
+    <value>You can only have {0} favorite players!</value>
+  </data>
+  <data name="GoalsRankingPanelTitle" xml:space="preserve">
+    <value>Goals Ranking</value>
+  </data>
+  <data name="YellowCardsRankingPanelTitle" xml:space="preserve">
+    <value>Yellow Cards Ranking</value>
+  </data>
 </root>

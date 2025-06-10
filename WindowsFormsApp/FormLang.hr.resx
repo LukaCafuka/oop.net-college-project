@@ -147,4 +147,53 @@
   <data name="MaleGender" xml:space="preserve">
     <value>Muško</value>
   </data>
+  <!-- New translations for main form -->
+  <data name="PlayersPanelTitle" xml:space="preserve">
+    <value>Igrači</value>
+  </data>
+  <data name="FavoritesPanelTitle" xml:space="preserve">
+    <value>Omiljeni Igrači</value>
+  </data>
+  <data name="RankingsPanelTitle" xml:space="preserve">
+    <value>Rangiranje</value>
+  </data>
+  <data name="AttendancePanelTitle" xml:space="preserve">
+    <value>Posjećenost Utakmica</value>
+  </data>
+  <data name="PrintButtonText" xml:space="preserve">
+    <value>Ispiši Rangiranje</value>
+  </data>
+  <data name="SettingsButtonText" xml:space="preserve">
+    <value>Postavke</value>
+  </data>
+  <data name="PlayerNameLabel" xml:space="preserve">
+    <value>Ime</value>
+  </data>
+  <data name="PlayerNumberLabel" xml:space="preserve">
+    <value>Broj</value>
+  </data>
+  <data name="PlayerPositionLabel" xml:space="preserve">
+    <value>Pozicija</value>
+  </data>
+  <data name="PlayerCaptainLabel" xml:space="preserve">
+    <value>Kapetan</value>
+  </data>
+  <data name="ContextMenuFavorite" xml:space="preserve">
+    <value>Postavi kao omiljenog</value>
+  </data>
+  <data name="ContextMenuRemoveFavorite" xml:space="preserve">
+    <value>Ukloni iz omiljenih</value>
+  </data>
+  <data name="ContextMenuChangeImage" xml:space="preserve">
+    <value>Promijeni Sliku</value>
+  </data>
+  <data name="MaxFavoritesWarning" xml:space="preserve">
+    <value>Možete imati samo {0} omiljena igrača!</value>
+  </data>
+  <data name="GoalsRankingPanelTitle" xml:space="preserve">
+    <value>Rangiranje Golova</value>
+  </data>
+  <data name="YellowCardsRankingPanelTitle" xml:space="preserve">
+    <value>Rangiranje Žutih Kartona</value>
+  </data>
 </root>
