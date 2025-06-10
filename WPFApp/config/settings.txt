@@ -1,7 +1,7 @@
 language=Croatian
 gender=Male
-country=Belgium
-versusCountry=Croatia
+country=Croatia
+versusCountry=Nigeria
 countryIndex=0
 versusCountryIndex=0
 resolution=1280 x 720

@@ -13,17 +13,20 @@ namespace WPFApp
     {
         private string selectedResolution = "Fullscreen";
         private List<TeamResults> _teams = new();
+        private List<Matches> _matches = new();
 
         public SettingsWindow()
         {
             InitializeComponent();
             Loaded += SettingsWindow_Loaded;
             LoadExistingSettings();
+            cbFavoriteCountry.SelectionChanged += cbFavoriteCountry_SelectionChanged;
         }
 
         private async void SettingsWindow_Loaded(object sender, RoutedEventArgs e)
         {
             await LoadTeams();
+            await LoadMatches();
             PopulateTeamComboBoxes();
         }
 
@@ -38,6 +41,20 @@ namespace WPFApp
             {
                 MessageBox.Show($"Error loading teams: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 _teams = new List<TeamResults>();
+            }
+        }
+
+        private async System.Threading.Tasks.Task LoadMatches()
+        {
+            try
+            {
+                var matchesSet = await ApiDataHandling.LoadJsonMatches();
+                _matches = matchesSet.ToList();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show($"Error loading matches: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                _matches = new List<Matches>();
             }
         }
 
@@ -151,6 +168,31 @@ namespace WPFApp
             else if (rbResolution3.IsChecked == true)
             {
                 selectedResolution = "1920 x 1080";
+            }
+        }
+
+        private void cbFavoriteCountry_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedFavorite = cbFavoriteCountry.SelectedItem as TeamResults;
+            if (selectedFavorite == null)
+            {
+                cbOpponentCountry.ItemsSource = null;
+                return;
+            }
+            // Find all teams that played against the favorite
+            var opponents = _matches
+                .Where(m => m.HomeTeamCountry == selectedFavorite.Country || m.AwayTeamCountry == selectedFavorite.Country)
+                .Select(m => m.HomeTeamCountry == selectedFavorite.Country ? m.AwayTeamCountry : m.HomeTeamCountry)
+                .Distinct()
+                .ToList();
+            var opponentTeams = _teams.Where(t => opponents.Contains(t.Country)).ToList();
+            cbOpponentCountry.ItemsSource = opponentTeams;
+            // Preselect from config if possible
+            if (!string.IsNullOrEmpty(ConfigFile.versusCountry))
+            {
+                var opp = opponentTeams.FirstOrDefault(t => t.Country == ConfigFile.versusCountry);
+                if (opp != null)
+                    cbOpponentCountry.SelectedItem = opp;
             }
         }
 
