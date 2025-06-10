@@ -1,15 +1,7 @@
 ﻿using Newtonsoft.Json;
 using QuickType;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DataLayer.JsonModels;
 using RestSharp;
-using static System.Net.Mime.MediaTypeNames;
-using Json2 = System.Text.Json;
 
 namespace DataLayer.DataHandling
 {
@@ -18,12 +10,12 @@ namespace DataLayer.DataHandling
         [JsonProperty("time")]
         [JsonConverter(typeof(TimeEnumConverter))]
         public Time Time { get; set; }
-        //Loads countries
+
         public static Task<HashSet<TeamResults>> LoadJsonTeams()
         {
             if (File.Exists(ResourceLocations.FemaleTeamsPath) && File.Exists(ResourceLocations.MaleTeamsPath))
             {
-                //File load
+
                 if (ConfigFile.gender == ConfigFile.Gender.Female)
                 {
                     return Task.Run(() =>
@@ -49,7 +41,7 @@ namespace DataLayer.DataHandling
             }
             else
             {
-                //Web load
+
                 if (ConfigFile.gender == ConfigFile.Gender.Female)
                 {
                     return Task.Run(() =>
@@ -71,12 +63,12 @@ namespace DataLayer.DataHandling
             }
         }
 
-        //Loads players
+
         public static Task<HashSet<Matches>> LoadJsonMatches()
         {
             if (File.Exists(ResourceLocations.FemaleMatchesPath) || File.Exists(ResourceLocations.MaleMatchesPath))
             {
-                //File load
+
                 if (ConfigFile.gender == ConfigFile.Gender.Female)
                 {
                     return Task.Run(() =>
@@ -102,7 +94,7 @@ namespace DataLayer.DataHandling
             }
             else
             {
-                //Web load
+
                 if (ConfigFile.gender == ConfigFile.Gender.Female)
                 {
                     return Task.Run(() =>
@@ -124,12 +116,12 @@ namespace DataLayer.DataHandling
             }
         }
 
-        //Loads detailed countries
+
         public static Task<HashSet<TeamResults>> LoadJsonResults()
         {
             if (File.Exists(ResourceLocations.FemaleTeamsPath) && File.Exists(ResourceLocations.MaleResultsPath))
             {
-                //File load
+
                 if (ConfigFile.gender == ConfigFile.Gender.Female)
                 {
                     return Task.Run(() =>
@@ -155,7 +147,7 @@ namespace DataLayer.DataHandling
             }
             else
             {
-                //Web load
+
                 if (ConfigFile.gender == ConfigFile.Gender.Female)
                 {
                     return Task.Run(() =>

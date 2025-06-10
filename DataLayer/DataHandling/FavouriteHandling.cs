@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace DataLayer.DataHandling
 {
@@ -10,12 +6,24 @@ namespace DataLayer.DataHandling
     {
         public static void SaveFavourites(HashSet<string> favourites)
         {
+            // Ensure the config directory exists
+            if (!Directory.Exists(ResourceLocations.FavouritesDir))
+            {
+                Directory.CreateDirectory(ResourceLocations.FavouritesDir);
+            }
+
             StringBuilder stringBuilder = new StringBuilder();
             favourites.ToList().ForEach(item => stringBuilder.AppendLine(item));
             File.WriteAllText(ResourceLocations.FavouritesPath, stringBuilder.ToString());
         }
         public static HashSet<string> LoadFavourites()
         {
+            // Ensure the config directory exists
+            if (!Directory.Exists(ResourceLocations.FavouritesDir))
+            {
+                Directory.CreateDirectory(ResourceLocations.FavouritesDir);
+            }
+
             if (!(File.Exists(ResourceLocations.FavouritesPath)))
             {
                 File.Create(ResourceLocations.FavouritesPath).Close();

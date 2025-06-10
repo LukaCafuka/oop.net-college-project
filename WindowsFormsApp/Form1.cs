@@ -157,7 +157,7 @@ namespace WindowsFormsApp
                 }
 
                 // Move all selected players
-                foreach (var player in selectedPlayers)
+                foreach (var player in selectedPlayers.ToList()) // Create a copy of the list to avoid modification during iteration
                 {
                     // Remove from source panel
                     sourcePanel.Controls.Remove(player);
@@ -167,9 +167,9 @@ namespace WindowsFormsApp
                     player.SetFavorite(isMovingToFavorites);
                 }
 
-                // Sort both panels
-                SortPanel(pnlPlayers);
-                SortPanel(pnlPlayerFavourites);
+                // Update layouts
+                UpdatePanelLayout(pnlPlayers);
+                UpdatePanelLayout(pnlPlayerFavourites);
 
                 SaveFavorites();
             }
@@ -189,9 +189,12 @@ namespace WindowsFormsApp
         private void SaveFavorites()
         {
             userFavourites.Clear();
-            foreach (var player in favoritePlayers)
+            foreach (PlayerInfo player in pnlPlayerFavourites.Controls)
             {
-                userFavourites.Add(player.Player.Name);
+                if (player.IsFavorite)
+                {
+                    userFavourites.Add(player.Player.Name);
+                }
             }
             FavouriteHandling.SaveFavourites(userFavourites);
         }
@@ -248,18 +251,17 @@ namespace WindowsFormsApp
                     // Check if player is in favorites
                     if (userFavourites.Contains(player.Name))
                     {
-                        pnlPlayerFavourites.Controls.Add(playerInfo);
                         playerInfo.SetFavorite(true);
                         favoritePlayers.Add(playerInfo);
+                        pnlPlayerFavourites.Controls.Add(playerInfo);
                     }
                     else
                     {
                         pnlPlayers.Controls.Add(playerInfo);
-                        playerInfo.SetFavorite(false);
                     }
                 }
 
-                // Update layouts after adding all players
+                // Update panel layouts
                 UpdatePanelLayout(pnlPlayers);
                 UpdatePanelLayout(pnlPlayerFavourites);
 
@@ -267,6 +269,7 @@ namespace WindowsFormsApp
             }
             catch (Exception ex)
             {
+                Debug.WriteLine($"LoadPlayers: Error loading players: {ex}");
                 MessageBox.Show($"Error loading players: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -275,7 +278,7 @@ namespace WindowsFormsApp
         {
             if (playerInfo.IsFavorite)
             {
-                // Check if we're at the limit
+                // Moving to favorites panel
                 if (pnlPlayerFavourites.Controls.Count >= MAX_FAVORITE_PLAYERS)
                 {
                     MessageBox.Show($"You can only have {MAX_FAVORITE_PLAYERS} favorite players!", 
@@ -284,27 +287,23 @@ namespace WindowsFormsApp
                     return;
                 }
 
-                // Move to favorites panel
-                if (playerInfo.Parent == pnlPlayers)
-                {
-                    pnlPlayers.Controls.Remove(playerInfo);
-                    pnlPlayerFavourites.Controls.Add(playerInfo);
-                }
+                pnlPlayers.Controls.Remove(playerInfo);
+                pnlPlayerFavourites.Controls.Add(playerInfo);
+                favoritePlayers.Add(playerInfo);
             }
             else
             {
-                // Move back to players panel
-                if (playerInfo.Parent == pnlPlayerFavourites)
-                {
-                    pnlPlayerFavourites.Controls.Remove(playerInfo);
-                    pnlPlayers.Controls.Add(playerInfo);
-                }
+                // Moving back to main panel
+                pnlPlayerFavourites.Controls.Remove(playerInfo);
+                pnlPlayers.Controls.Add(playerInfo);
+                favoritePlayers.Remove(playerInfo);
             }
 
-            // Sort both panels
-            SortPanel(pnlPlayers);
-            SortPanel(pnlPlayerFavourites);
+            // Update layouts
+            UpdatePanelLayout(pnlPlayers);
+            UpdatePanelLayout(pnlPlayerFavourites);
 
+            // Save changes
             SaveFavorites();
         }
 
