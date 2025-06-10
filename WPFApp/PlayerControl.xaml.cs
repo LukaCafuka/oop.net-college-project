@@ -88,8 +88,15 @@ namespace WPFApp
         {
             if (PlayerData != null)
             {
-                var window = new PlayerInfoWindow(PlayerData, Goals, YellowCards);
-                window.Show();
+                if (Application.Current.MainWindow is MainWindow mainWindow)
+                {
+                    mainWindow.ShowPlayerInfoWindow(PlayerData, Goals, YellowCards);
+                }
+                else
+                {
+                    var window = new PlayerInfoWindow(PlayerData, Goals, YellowCards);
+                    window.Show();
+                }
             }
         }
     }

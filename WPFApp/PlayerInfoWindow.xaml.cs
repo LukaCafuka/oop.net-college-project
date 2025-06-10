@@ -12,6 +12,8 @@ namespace WPFApp
     {
         private string? _playerName;
 
+        public event Action<string>? PlayerImageChanged;
+
         public PlayerInfoWindow(StartingEleven player, int goals, int yellowCards)
         {
             InitializeComponent();
@@ -34,28 +36,49 @@ namespace WPFApp
             txtGoals.Text = goals.ToString();
             txtYellowCards.Text = yellowCards.ToString();
 
-            // Set player image
-            string playerImagePath = $"Resources/Players/{player.Name}.png";
-            string defaultImagePath = "Resources/default_player.png";
+            // Load player image
+            RefreshPlayerImage();
+        }
+
+        private void RefreshPlayerImage()
+        {
+            if (string.IsNullOrEmpty(_playerName)) return;
+
             try
             {
+                // Set player image - use actual player name without modification
+                string playerImagePath = $"Resources/Players/{_playerName}.png";
+                string defaultImagePath = "Resources/Players/no_image.png";
+                
                 if (File.Exists(playerImagePath))
                 {
-                    imgPlayer.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri(Path.GetFullPath(playerImagePath)));
+                    LoadImageFromPath(playerImagePath);
                 }
                 else if (File.Exists(defaultImagePath))
                 {
-                    imgPlayer.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri(Path.GetFullPath(defaultImagePath)));
+                    LoadImageFromPath(defaultImagePath);
                 }
                 else
                 {
                     imgPlayer.Source = null; // No image available
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"Error loading image for {_playerName}: {ex.Message}");
                 imgPlayer.Source = null;
             }
+        }
+
+        private void LoadImageFromPath(string imagePath)
+        {
+            var bitmap = new System.Windows.Media.Imaging.BitmapImage();
+            bitmap.BeginInit();
+            bitmap.CacheOption = System.Windows.Media.Imaging.BitmapCacheOption.OnLoad;
+            bitmap.UriSource = new Uri(Path.GetFullPath(imagePath), UriKind.Absolute);
+            bitmap.EndInit();
+            bitmap.Freeze();
+            imgPlayer.Source = bitmap;
         }
 
         private void AnimateIn()
@@ -112,8 +135,17 @@ namespace WPFApp
                 string destPath = Path.Combine(destDir, _playerName + ".png");
                 try
                 {
+                    // First copy the file
                     File.Copy(dlg.FileName, destPath, true);
-                    imgPlayer.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri(destPath));
+                    
+                    // Force a small delay to ensure file is written
+                    System.Threading.Thread.Sleep(100);
+                    
+                    // Refresh the image display
+                    RefreshPlayerImage();
+                    
+                    // Notify that the image changed
+                    PlayerImageChanged?.Invoke(_playerName!);
                 }
                 catch (Exception ex)
                 {

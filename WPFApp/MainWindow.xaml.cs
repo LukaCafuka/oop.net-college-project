@@ -277,18 +277,56 @@ namespace WPFApp
 
         private ImageSource GetPlayerImage(string playerName)
         {
-            // Try to load an image from Resources/Players/{playerName}.png, fallback to a default
             try
             {
-                string safeName = playerName.Replace(' ', '_');
-                string path = $"pack://application:,,,/Resources/Players/{safeName}.png";
-                return new BitmapImage(new Uri(path));
+                // Don't replace spaces - use the actual player name
+                string filePath = System.IO.Path.Combine("Resources", "Players", $"{playerName}.png");
+                if (System.IO.File.Exists(filePath))
+                {
+                    // Load from file system and release the file handle
+                    var bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.UriSource = new Uri(System.IO.Path.GetFullPath(filePath), UriKind.Absolute);
+                    bitmap.EndInit();
+                    bitmap.Freeze();
+                    return bitmap;
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                // Use a generic footballer icon (online PNG)
-                return new BitmapImage(new Uri("https://cdn-icons-png.flaticon.com/512/616/616494.png"));
+                System.Diagnostics.Debug.WriteLine($"Error loading image for {playerName}: {ex.Message}");
             }
+
+            // Always return fallback image if player image doesn't exist or failed to load
+            try
+            {
+                string placeholderPath = System.IO.Path.Combine("Resources", "Players", "no_image.png");
+                if (System.IO.File.Exists(placeholderPath))
+                {
+                    var bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.UriSource = new Uri(System.IO.Path.GetFullPath(placeholderPath), UriKind.Absolute);
+                    bitmap.EndInit();
+                    bitmap.Freeze();
+                    return bitmap;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error loading fallback image: {ex.Message}");
+            }
+
+            return null; // Last resort
+        }
+
+        // Helper to show player info and refresh images after upload
+        public void ShowPlayerInfoWindow(StartingEleven player, int goals, int yellowCards)
+        {
+            var win = new PlayerInfoWindow(player, goals, yellowCards);
+            win.PlayerImageChanged += (playerName) => Dispatcher.Invoke(DrawLineups);
+            win.ShowDialog();
         }
     }
 }
