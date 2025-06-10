@@ -4,12 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
-             d:DesignHeight="80" d:DesignWidth="60">
+             d:DesignHeight="60" d:DesignWidth="50">
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Image Width="32" Height="32"
+        <Image Width="28" Height="28"
                Source="{Binding PlayerImage}"
                Stretch="UniformToFill" />
-        <TextBlock Text="{Binding ShirtNumber}" FontWeight="Bold" FontSize="11" HorizontalAlignment="Center"/>
-        <TextBlock Text="{Binding PlayerName}" FontSize="9" HorizontalAlignment="Center" TextWrapping="Wrap" Width="60"/>
+        <TextBlock Text="{Binding ShirtNumber}" FontWeight="Bold" FontSize="8" HorizontalAlignment="Center"/>
+        <TextBlock Text="{Binding PlayerName}" FontSize="6" HorizontalAlignment="Center" TextWrapping="Wrap" Width="50"/>
     </StackPanel>
 </UserControl> 

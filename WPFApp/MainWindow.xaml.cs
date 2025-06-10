@@ -202,8 +202,9 @@ namespace WPFApp
             var favoriteStats = favoriteIsHome ? match.HomeTeamStatistics : match.AwayTeamStatistics;
             var opponentStats = favoriteIsHome ? match.AwayTeamStatistics : match.HomeTeamStatistics;
 
-            DrawTeamLineup(favoriteStats?.StartingEleven, true, match, favoriteIsHome);
-            DrawTeamLineup(opponentStats?.StartingEleven, false, match, !favoriteIsHome);
+            // Switch positioning: opponent on left (home), favorite on right (away)
+            DrawTeamLineup(opponentStats?.StartingEleven, true, match, !favoriteIsHome);
+            DrawTeamLineup(favoriteStats?.StartingEleven, false, match, favoriteIsHome);
         }
 
         private void DrawTeamLineup(StartingEleven[]? players, bool isHomeTeam, Matches match, bool isHomeTeamInMatch)
@@ -213,20 +214,20 @@ namespace WPFApp
             double fieldWidth = 800;
             double fieldHeight = 400;
 
-            // X positions for home and away (forwards deeper into opponent's half)
+            // X positions for home and away teams - more realistic distribution
             var homeX = new Dictionary<Position, double>
             {
-                { Position.Goalie, 60 },
-                { Position.Defender, 180 },
-                { Position.Midfield, 350 },
-                { Position.Forward, fieldWidth - 120 }
+                { Position.Goalie, 80 },        // Home goalkeeper near left goal
+                { Position.Defender, 200 },     // Home defenders
+                { Position.Midfield, 350 },     // Home midfielders (center)
+                { Position.Forward, 120 }       // Home forwards (attacking opponent's half)
             };
             var awayX = new Dictionary<Position, double>
             {
-                { Position.Goalie, fieldWidth - 60 },
-                { Position.Defender, fieldWidth - 180 },
-                { Position.Midfield, fieldWidth - 350 },
-                { Position.Forward, 120 }
+                { Position.Goalie, fieldWidth - 80 },   // Away goalkeeper near right goal (720)
+                { Position.Defender, fieldWidth - 200 }, // Away defenders (600)
+                { Position.Midfield, fieldWidth - 350 }, // Away midfielders (450)
+                { Position.Forward, fieldWidth - 120 }   // Away forwards (250)
             };
             var xPositions = isHomeTeam ? homeX : awayX;
 
@@ -237,10 +238,21 @@ namespace WPFApp
                 double x = xPositions[group.Key];
                 int count = group.Count();
 
-                // Distribute players along the Y axis (width of the field), centered
-                double yStart = 60;
-                double yEnd = fieldHeight - 60;
-                double yStep = (yEnd - yStart) / (count + 1);
+                // Better Y distribution to prevent clustering
+                double yStart = 80;
+                double yEnd = fieldHeight - 80;
+                double totalYSpace = yEnd - yStart;
+                
+                // Adjust spacing based on position type for more realistic formations
+                double ySpacing = count > 1 ? totalYSpace / (count + 1) : totalYSpace / 2;
+                
+                // Special handling for positions with many players
+                if (count > 4) // If there are many players in one position (unusual but possible)
+                {
+                    ySpacing = totalYSpace / (count + 0.5);
+                    yStart = 60;
+                    yEnd = fieldHeight - 60;
+                }
 
                 int i = 1;
                 foreach (var player in group)
@@ -254,8 +266,9 @@ namespace WPFApp
                         Goals = GetPlayerGoals(player.Name, teamEvents),
                         YellowCards = GetPlayerYellowCards(player.Name, teamEvents)
                     };
-                    double y = yStart + yStep * i;
-                    Canvas.SetLeft(control, x - 20);
+                    
+                    double y = yStart + ySpacing * i;
+                    Canvas.SetLeft(control, x - 20); // Adjusted for smaller control size
                     Canvas.SetTop(control, y - 20);
                     canvasField.Children.Add(control);
                     i++;

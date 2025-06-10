@@ -63,25 +63,25 @@ namespace WindowsFormsApp
                 {
                     try
                     {
-                        var newImage = imageManager.LoadPlayerImage(Player.Name);
-                        
-                        // Update the UI on the main thread
+                    var newImage = imageManager.LoadPlayerImage(Player.Name);
+                    
+                    // Update the UI on the main thread
                         if (!this.IsDisposed && !this.Disposing)
                         {
-                            this.Invoke((MethodInvoker)delegate
+                    this.Invoke((MethodInvoker)delegate
                             {
                                 if (!this.IsDisposed && !this.Disposing && playerImage != null && !playerImage.IsDisposed)
-                                {
-                                    if (playerImage.Image != null)
-                                    {
-                                        var oldImage = playerImage.Image;
-                                        playerImage.Image = newImage;
-                                        oldImage.Dispose();
-                                    }
-                                    else
-                                    {
-                                        playerImage.Image = newImage;
-                                    }
+                    {
+                        if (playerImage.Image != null)
+                        {
+                            var oldImage = playerImage.Image;
+                            playerImage.Image = newImage;
+                            oldImage.Dispose();
+                        }
+                        else
+                        {
+                            playerImage.Image = newImage;
+                        }
                                 }
                                 else
                                 {
