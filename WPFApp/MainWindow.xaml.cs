@@ -209,26 +209,39 @@ namespace WPFApp
         private void DrawTeamLineup(StartingEleven[]? players, bool isHomeTeam, Matches match, bool isHomeTeamInMatch)
         {
             if (players == null) return;
-            // Y positions for each role (for 800x400 field)
-            var yPositions = new Dictionary<Position, double>
-            {
-                { Position.Goalie, isHomeTeam ? 350 : 50 },
-                { Position.Defender, isHomeTeam ? 280 : 120 },
-                { Position.Midfield, 200 },
-                { Position.Forward, isHomeTeam ? 120 : 280 }
-            };
 
-            // Get team events
+            double fieldWidth = 800;
+            double fieldHeight = 400;
+
+            // X positions for home and away (forwards deeper into opponent's half)
+            var homeX = new Dictionary<Position, double>
+            {
+                { Position.Goalie, 60 },
+                { Position.Defender, 180 },
+                { Position.Midfield, 350 },
+                { Position.Forward, fieldWidth - 120 }
+            };
+            var awayX = new Dictionary<Position, double>
+            {
+                { Position.Goalie, fieldWidth - 60 },
+                { Position.Defender, fieldWidth - 180 },
+                { Position.Midfield, fieldWidth - 350 },
+                { Position.Forward, 120 }
+            };
+            var xPositions = isHomeTeam ? homeX : awayX;
+
             var teamEvents = isHomeTeamInMatch ? match.HomeTeamEvents : match.AwayTeamEvents;
 
             foreach (var group in players.GroupBy(p => p.Position))
             {
-                double y = yPositions[group.Key];
+                double x = xPositions[group.Key];
                 int count = group.Count();
-                // X range for home: 50–350, for away: 450–750
-                double xStart = isHomeTeam ? 50 : 450;
-                double xEnd = isHomeTeam ? 350 : 750;
-                double xStep = (xEnd - xStart) / (count + 1);
+
+                // Distribute players along the Y axis (width of the field), centered
+                double yStart = 60;
+                double yEnd = fieldHeight - 60;
+                double yStep = (yEnd - yStart) / (count + 1);
+
                 int i = 1;
                 foreach (var player in group)
                 {
@@ -241,9 +254,9 @@ namespace WPFApp
                         Goals = GetPlayerGoals(player.Name, teamEvents),
                         YellowCards = GetPlayerYellowCards(player.Name, teamEvents)
                     };
-                    double x = xStart + xStep * i;
-                    Canvas.SetLeft(control, x - 20); // Center the control
-                    Canvas.SetTop(control, y);
+                    double y = yStart + yStep * i;
+                    Canvas.SetLeft(control, x - 20);
+                    Canvas.SetTop(control, y - 20);
                     canvasField.Children.Add(control);
                     i++;
                 }
