@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "WPFApp": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\bubif\\Documents\\OOP.NET Projekt\\OOP.NET-Projekt\\WPFApp"
+    }
+  }
+}

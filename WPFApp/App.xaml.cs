@@ -42,28 +42,25 @@ namespace WPFApp
             {
                 base.OnStartup(e);
 
-                // Initialize culture handling
+                // Initialize culture
                 CultureHandling.Initialize("WPFApp.Resources.Strings", typeof(App));
 
-                // Check if config exists
+                // Check config
                 if (!ConfigHandling.ConfigExists())
                 {
                     var settingsWindow = new SettingsWindow();
                     if (settingsWindow.ShowDialog() != true)
                     {
-                        // User closed the settings window without saving
                         Shutdown();
                         return;
                     }
                 }
                 else
                 {
-                    // Load existing config
                     ConfigHandling.LoadConfig();
                     CultureHandling.LoadCulture();
                 }
 
-                // Start the main window
                 var mainWindow = new MainWindow();
                 mainWindow.Show();
             }

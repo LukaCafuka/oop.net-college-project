@@ -1,6 +1,6 @@
 using DataLayer.DataHandling;
 using DataLayer.JsonModels;
-using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Collections.Generic;
@@ -30,7 +30,7 @@ namespace WPFApp
             PopulateTeamComboBoxes();
         }
 
-        private async System.Threading.Tasks.Task LoadTeams()
+        private async Task LoadTeams()
         {
             try
             {
@@ -44,7 +44,7 @@ namespace WPFApp
             }
         }
 
-        private async System.Threading.Tasks.Task LoadMatches()
+        private async Task LoadMatches()
         {
             try
             {
@@ -62,7 +62,7 @@ namespace WPFApp
         {
             cbFavoriteCountry.ItemsSource = _teams;
             cbOpponentCountry.ItemsSource = _teams;
-            // Preselect from config
+
             if (!string.IsNullOrEmpty(ConfigFile.country))
             {
                 var fav = _teams.FirstOrDefault(t => t.Country == ConfigFile.country);
@@ -79,7 +79,6 @@ namespace WPFApp
 
         private void LoadExistingSettings()
         {
-            // Load gender setting
             if (ConfigFile.gender == ConfigFile.Gender.Male)
             {
                 rbMale.IsChecked = true;
@@ -89,7 +88,6 @@ namespace WPFApp
                 rbFemale.IsChecked = true;
             }
 
-            // Load language setting
             if (ConfigFile.language == "Croatian")
             {
                 rbCroatian.IsChecked = true;
@@ -99,7 +97,6 @@ namespace WPFApp
                 rbEnglish.IsChecked = true;
             }
 
-            // Load resolution setting
             if (!string.IsNullOrEmpty(ConfigFile.resolution))
             {
                 selectedResolution = ConfigFile.resolution;
@@ -127,11 +124,10 @@ namespace WPFApp
                 ConfigFile.gender = ConfigFile.Gender.Male;
             else if (rbFemale.IsChecked == true)
                 ConfigFile.gender = ConfigFile.Gender.Female;
-            // Reload teams for new gender
             _ = ReloadTeamsOnGenderChange();
         }
 
-        private async System.Threading.Tasks.Task ReloadTeamsOnGenderChange()
+        private async Task ReloadTeamsOnGenderChange()
         {
             await LoadTeams();
             PopulateTeamComboBoxes();
@@ -181,7 +177,6 @@ namespace WPFApp
                 cbOpponentCountry.ItemsSource = null;
                 return;
             }
-            // Find all teams that played against the favorite
             var opponents = _matches
                 .Where(m => m.HomeTeamCountry == selectedFavorite.Country || m.AwayTeamCountry == selectedFavorite.Country)
                 .Select(m => m.HomeTeamCountry == selectedFavorite.Country ? m.AwayTeamCountry : m.HomeTeamCountry)
@@ -189,7 +184,6 @@ namespace WPFApp
                 .ToList();
             var opponentTeams = _teams.Where(t => opponents.Contains(t.Country)).ToList();
             cbOpponentCountry.ItemsSource = opponentTeams;
-            // Preselect from config if possible
             if (!string.IsNullOrEmpty(ConfigFile.versusCountry))
             {
                 var opp = opponentTeams.FirstOrDefault(t => t.Country == ConfigFile.versusCountry);
@@ -200,7 +194,7 @@ namespace WPFApp
 
         private void SaveSettings_Click(object sender, RoutedEventArgs e)
         {
-            // Save selected favorite/opponent
+
             if (cbFavoriteCountry.SelectedItem is TeamResults fav)
                 ConfigFile.country = fav.Country;
             if (cbOpponentCountry.SelectedItem is TeamResults opp)

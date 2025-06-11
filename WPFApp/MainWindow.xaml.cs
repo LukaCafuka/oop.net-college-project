@@ -33,14 +33,12 @@ namespace WPFApp
             InitializeComponent();
             ApplyResolution();
             Loaded += MainWindow_Loaded;
-            
-            // Subscribe to language changes
+
             LocalizationHelper.Instance.PropertyChanged += (s, e) => 
             {
-                // Force refresh of all bound properties
+
                 if (string.IsNullOrEmpty(e.PropertyName))
                 {
-                    // Re-bind the data context to refresh all bindings
                     var temp = DataContext;
                     DataContext = null;
                     DataContext = temp;
@@ -67,7 +65,6 @@ namespace WPFApp
             cbFavoriteTeam.ItemsSource = _teams;
             cbFavoriteTeam.SelectedValuePath = "FifaCode";
 
-            // Preselect favorite from config
             if (!string.IsNullOrEmpty(ConfigFile.country))
             {
                 var fav = _teams.FirstOrDefault(t => t.Country == ConfigFile.country);
@@ -89,7 +86,7 @@ namespace WPFApp
         {
             cbOpponentTeam.ItemsSource = null;
             if (_selectedFavorite == null) return;
-            // Find all teams that played against the favorite
+
             var opponents = _matches
                 .Where(m => m.HomeTeamCountry == _selectedFavorite.Country || m.AwayTeamCountry == _selectedFavorite.Country)
                 .Select(m => m.HomeTeamCountry == _selectedFavorite.Country ? m.AwayTeamCountry : m.HomeTeamCountry)
@@ -99,7 +96,6 @@ namespace WPFApp
             cbOpponentTeam.ItemsSource = opponentTeams;
             cbOpponentTeam.SelectedValuePath = "FifaCode";
 
-            // Preselect from config
             if (!string.IsNullOrEmpty(ConfigFile.versusCountry))
             {
                 var opp = opponentTeams.FirstOrDefault(t => t.Country == ConfigFile.versusCountry);
@@ -120,7 +116,7 @@ namespace WPFApp
         {
             lblResult.Text = string.Empty;
             if (_selectedFavorite == null || _selectedOpponent == null) return;
-            // Find the match
+
             var match = _matches.FirstOrDefault(m =>
                 (m.HomeTeamCountry == _selectedFavorite.Country && m.AwayTeamCountry == _selectedOpponent.Country) ||
                 (m.HomeTeamCountry == _selectedOpponent.Country && m.AwayTeamCountry == _selectedFavorite.Country));
@@ -156,7 +152,7 @@ namespace WPFApp
             try
             {
                 var win = new TeamInfoWindow(team);
-                win.Show(); // non-modal
+                win.Show();
                 win.AnimateIn();
             }
             catch (Exception ex)
@@ -204,18 +200,15 @@ namespace WPFApp
             canvasField.Children.Clear();
             if (_selectedFavorite == null || _selectedOpponent == null) return;
 
-            // Find the match between the two teams
             var match = _matches.FirstOrDefault(m =>
                 (m.HomeTeamCountry == _selectedFavorite.Country && m.AwayTeamCountry == _selectedOpponent.Country) ||
                 (m.HomeTeamCountry == _selectedOpponent.Country && m.AwayTeamCountry == _selectedFavorite.Country));
             if (match == null) return;
 
-            // Determine which team is home/away
             bool favoriteIsHome = match.HomeTeamCountry == _selectedFavorite.Country;
             var favoriteStats = favoriteIsHome ? match.HomeTeamStatistics : match.AwayTeamStatistics;
             var opponentStats = favoriteIsHome ? match.AwayTeamStatistics : match.HomeTeamStatistics;
 
-            // Switch positioning: opponent on left (home), favorite on right (away)
             DrawTeamLineup(opponentStats?.StartingEleven, true, match, !favoriteIsHome);
             DrawTeamLineup(favoriteStats?.StartingEleven, false, match, favoriteIsHome);
         }
@@ -227,20 +220,19 @@ namespace WPFApp
             double fieldWidth = 800;
             double fieldHeight = 400;
 
-            // X positions for home and away teams - more realistic distribution
             var homeX = new Dictionary<Position, double>
             {
-                { Position.Goalie, 80 },        // Home goalkeeper near left goal
+                { Position.Goalie, 80 },        // Home goalkeeper
                 { Position.Defender, 200 },     // Home defenders
-                { Position.Midfield, 350 },     // Home midfielders (center)
-                { Position.Forward, 120 }       // Home forwards (attacking opponent's half)
+                { Position.Midfield, 350 },     // Home midfielders
+                { Position.Forward, 120 }       // Home forwards
             };
             var awayX = new Dictionary<Position, double>
             {
-                { Position.Goalie, fieldWidth - 80 },   // Away goalkeeper near right goal (720)
-                { Position.Defender, fieldWidth - 200 }, // Away defenders (600)
-                { Position.Midfield, fieldWidth - 350 }, // Away midfielders (450)
-                { Position.Forward, fieldWidth - 120 }   // Away forwards (250)
+                { Position.Goalie, fieldWidth - 80 },   // Away goalkeeper
+                { Position.Defender, fieldWidth - 200 }, // Away defenders
+                { Position.Midfield, fieldWidth - 350 }, // Away midfielders
+                { Position.Forward, fieldWidth - 120 }   // Away forwards
             };
             var xPositions = isHomeTeam ? homeX : awayX;
 
@@ -251,16 +243,13 @@ namespace WPFApp
                 double x = xPositions[group.Key];
                 int count = group.Count();
 
-                // Better Y distribution to prevent clustering
                 double yStart = 80;
                 double yEnd = fieldHeight - 80;
                 double totalYSpace = yEnd - yStart;
-                
-                // Adjust spacing based on position type for more realistic formations
+
                 double ySpacing = count > 1 ? totalYSpace / (count + 1) : totalYSpace / 2;
-                
-                // Special handling for positions with many players
-                if (count > 4) // If there are many players in one position (unusual but possible)
+
+                if (count > 4)
                 {
                     ySpacing = totalYSpace / (count + 0.5);
                     yStart = 60;
@@ -281,7 +270,7 @@ namespace WPFApp
                     };
                     
                     double y = yStart + ySpacing * i;
-                    Canvas.SetLeft(control, x - 20); // Adjusted for smaller control size
+                    Canvas.SetLeft(control, x - 20);
                     Canvas.SetTop(control, y - 20);
                     canvasField.Children.Add(control);
                     i++;
@@ -305,11 +294,9 @@ namespace WPFApp
         {
             try
             {
-                // Don't replace spaces - use the actual player name
                 string filePath = System.IO.Path.Combine("Resources", "Players", $"{playerName}.png");
                 if (System.IO.File.Exists(filePath))
                 {
-                    // Load from file system and release the file handle
                     var bitmap = new BitmapImage();
                     bitmap.BeginInit();
                     bitmap.CacheOption = BitmapCacheOption.OnLoad;
@@ -324,7 +311,6 @@ namespace WPFApp
                 System.Diagnostics.Debug.WriteLine($"Error loading image for {playerName}: {ex.Message}");
             }
 
-            // Always return fallback image if player image doesn't exist or failed to load
             try
             {
                 string placeholderPath = System.IO.Path.Combine("Resources", "Players", "no_image.png");
@@ -344,10 +330,9 @@ namespace WPFApp
                 System.Diagnostics.Debug.WriteLine($"Error loading fallback image: {ex.Message}");
             }
 
-            return null; // Last resort
+            return null;
         }
 
-        // Helper to show player info and refresh images after upload
         public void ShowPlayerInfoWindow(StartingEleven player, int goals, int yellowCards)
         {
             var win = new PlayerInfoWindow(player, goals, yellowCards);

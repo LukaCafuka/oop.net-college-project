@@ -46,7 +46,6 @@ namespace WPFApp
 
             try
             {
-                // Set player image - use actual player name without modification
                 string playerImagePath = $"Resources/Players/{_playerName}.png";
                 string defaultImagePath = "Resources/Players/no_image.png";
                 
@@ -60,7 +59,7 @@ namespace WPFApp
                 }
                 else
                 {
-                    imgPlayer.Source = null; // No image available
+                    imgPlayer.Source = null;
                 }
             }
             catch (Exception ex)
@@ -83,7 +82,7 @@ namespace WPFApp
 
         private void AnimateIn()
         {
-            // Create a scale animation
+
             var scaleX = new DoubleAnimation
             {
                 From = 0.5,
@@ -100,7 +99,6 @@ namespace WPFApp
                 EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
             };
 
-            // Create an opacity animation
             var opacity = new DoubleAnimation
             {
                 From = 0,
@@ -109,7 +107,7 @@ namespace WPFApp
                 EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
             };
 
-            // Apply the animations
+
             var transform = new System.Windows.Media.ScaleTransform();
             RenderTransform = transform;
             RenderTransformOrigin = new Point(0.5, 0.5);
@@ -135,16 +133,9 @@ namespace WPFApp
                 string destPath = Path.Combine(destDir, _playerName + ".png");
                 try
                 {
-                    // First copy the file
                     File.Copy(dlg.FileName, destPath, true);
-                    
-                    // Force a small delay to ensure file is written
-                    System.Threading.Thread.Sleep(100);
-                    
-                    // Refresh the image display
+                    System.Threading.Thread.Sleep(100);                 
                     RefreshPlayerImage();
-                    
-                    // Notify that the image changed
                     PlayerImageChanged?.Invoke(_playerName!);
                 }
                 catch (Exception ex)

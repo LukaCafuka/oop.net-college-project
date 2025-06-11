@@ -11,7 +11,7 @@ namespace WPFApp
         {
             InitializeComponent();
             PopulateFields(team);
-            Opacity = 0; // Start transparent for animation
+            Opacity = 0; // Start point for animation
         }
 
         private void PopulateFields(TeamResults team)
