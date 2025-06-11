@@ -6,7 +6,6 @@ namespace DataLayer.DataHandling
     {
         public static void SaveFavourites(HashSet<string> favourites)
         {
-            // Ensure the config directory exists
             if (!Directory.Exists(ResourceLocations.FavouritesDir))
             {
                 Directory.CreateDirectory(ResourceLocations.FavouritesDir);
@@ -18,7 +17,6 @@ namespace DataLayer.DataHandling
         }
         public static HashSet<string> LoadFavourites()
         {
-            // Ensure the config directory exists
             if (!Directory.Exists(ResourceLocations.FavouritesDir))
             {
                 Directory.CreateDirectory(ResourceLocations.FavouritesDir);

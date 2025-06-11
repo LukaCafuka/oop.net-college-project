@@ -41,7 +41,6 @@ namespace WindowsFormsApp
                     cbFavoriteTeam.Items.Add(team.FormatForComboBox());
                 }
 
-                // Set the selected team if one exists in config
                 if (!string.IsNullOrEmpty(ConfigFile.country))
                 {
                     var team = teams.FirstOrDefault(t => t.Country == ConfigFile.country);

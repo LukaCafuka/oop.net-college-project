@@ -80,21 +80,21 @@
             pnlYellowCardsRanking.BorderStyle = BorderStyle.FixedSingle;
             pnlYellowCardsRanking.Location = new Point(850, 261);
             pnlYellowCardsRanking.Name = "pnlYellowCardsRanking";
-            pnlYellowCardsRanking.Size = new Size(338, 303);
+            pnlYellowCardsRanking.Size = new Size(338, 292);
             pnlYellowCardsRanking.TabIndex = 1;
             // 
             // pnlAttendanceRanking
             // 
             pnlAttendanceRanking.AutoScroll = true;
             pnlAttendanceRanking.BorderStyle = BorderStyle.FixedSingle;
-            pnlAttendanceRanking.Location = new Point(850, 570);
+            pnlAttendanceRanking.Location = new Point(850, 559);
             pnlAttendanceRanking.Name = "pnlAttendanceRanking";
             pnlAttendanceRanking.Size = new Size(338, 204);
             pnlAttendanceRanking.TabIndex = 2;
             // 
             // btnPrintRankings
             // 
-            btnPrintRankings.Location = new Point(850, 780);
+            btnPrintRankings.Location = new Point(850, 769);
             btnPrintRankings.Name = "btnPrintRankings";
             btnPrintRankings.Size = new Size(159, 23);
             btnPrintRankings.TabIndex = 6;
@@ -104,7 +104,7 @@
             // 
             // btnOpenConfig
             // 
-            btnOpenConfig.Location = new Point(1053, 780);
+            btnOpenConfig.Location = new Point(1053, 769);
             btnOpenConfig.Name = "btnOpenConfig";
             btnOpenConfig.Size = new Size(135, 23);
             btnOpenConfig.TabIndex = 7;

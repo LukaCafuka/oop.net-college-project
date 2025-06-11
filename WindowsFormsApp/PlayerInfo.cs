@@ -58,14 +58,12 @@ namespace WindowsFormsApp
         {
             try
             {
-                // Load the image in a background task
                 Task.Run(() =>
                 {
                     try
                     {
                     var newImage = imageManager.LoadPlayerImage(Player.Name);
-                    
-                    // Update the UI on the main thread
+
                         if (!this.IsDisposed && !this.Disposing)
                         {
                     this.Invoke((MethodInvoker)delegate
@@ -85,26 +83,24 @@ namespace WindowsFormsApp
                                 }
                                 else
                                 {
-                                    // If the control is disposed, dispose the new image
                                     newImage?.Dispose();
                                 }
                             });
                         }
                         else
                         {
-                            // If the control is disposed, dispose the new image
                             newImage?.Dispose();
                         }
                     }
                     catch (Exception)
                     {
-                        // If image loading fails, it will use the default image
+
                     }
                 });
             }
             catch (Exception)
             {
-                // If image loading fails, it will use the default image
+
             }
         }
 
@@ -112,24 +108,24 @@ namespace WindowsFormsApp
         {
             if (e is MouseEventArgs me && me.Button == MouseButtons.Right)
             {
-                return; // Let the context menu handle it
+                return;
             }
 
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp";
+                openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png";
                 openFileDialog.Title = "Select Player Image";
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     try
                     {
-                        // Load and resize the image in a background task
+
                         Task.Run(() =>
                         {
                             using (var originalImage = Image.FromFile(openFileDialog.FileName))
                             {
-                                // Create a new bitmap for the resized image
+
                                 var resizedImage = new Bitmap(80, 80);
                                 using (var graphics = Graphics.FromImage(resizedImage))
                                 {
@@ -137,10 +133,8 @@ namespace WindowsFormsApp
                                     graphics.DrawImage(originalImage, 0, 0, 80, 80);
                                 }
 
-                                // Save the image
                                 imageManager.SavePlayerImageAsync(Player.Name, resizedImage).Wait();
 
-                                // Update the UI on the main thread
                                 this.Invoke((MethodInvoker)delegate
                                 {
                                     if (playerImage.Image != null)
@@ -213,7 +207,6 @@ namespace WindowsFormsApp
         {
             if (e.Button == MouseButtons.Middle)
             {
-                // Toggle selection of this player
                 ToggleSelection();
             }
         }
@@ -222,10 +215,8 @@ namespace WindowsFormsApp
         {
             if (e.Button == MouseButtons.Left)
             {
-                // If no players are selected, select this one
                 if (!IsSelected)
                 {
-                    // Clear other selections
                     if (this.Parent is Panel panel)
                     {
                         foreach (Control control in panel.Controls)

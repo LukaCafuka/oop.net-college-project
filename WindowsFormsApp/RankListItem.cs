@@ -1,17 +1,13 @@
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-
 namespace WindowsFormsApp
 {
     public class RankListItem : UserControl
     {
-        private PictureBox playerImage = null!;
-        private Label playerNameLabel = null!;
-        private Label countLabel = null!;
+        private PictureBox pbPlayerImage = null!;
+        private Label lblPlayerName = null!;
+        private Label lblCount = null!;
         private PlayerImageManager imageManager = null!;
 
-        public override string Text => playerNameLabel.Text;
+        public override string Text => lblPlayerName.Text;
         public int Count { get; private set; }
 
         public RankListItem(string playerName, int count)
@@ -24,41 +20,60 @@ namespace WindowsFormsApp
 
         private void InitializeComponent()
         {
-            this.playerImage = new PictureBox();
-            this.playerNameLabel = new Label();
-            this.countLabel = new Label();
-
-            // Configure player image
-            this.playerImage.Size = new Size(80, 80);
-            this.playerImage.SizeMode = PictureBoxSizeMode.Zoom;
-            this.playerImage.Location = new Point(5, 5);
-            this.playerImage.BorderStyle = BorderStyle.FixedSingle;
-
-            // Configure player name label
-            this.playerNameLabel.AutoSize = true;
-            this.playerNameLabel.Location = new Point(90, 5);
-            this.playerNameLabel.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-            this.playerNameLabel.MaximumSize = new Size(200, 0);
-
-            // Configure count label
-            this.countLabel.AutoSize = true;
-            this.countLabel.Location = new Point(90, 30);
-            this.countLabel.Font = new Font("Segoe UI", 9, FontStyle.Bold);
-
-            // Configure control
-            this.Controls.Add(this.playerImage);
-            this.Controls.Add(this.playerNameLabel);
-            this.Controls.Add(this.countLabel);
-            this.Size = new Size(300, 90);
-            this.BackColor = Color.White;
+            pbPlayerImage = new PictureBox();
+            lblPlayerName = new Label();
+            lblCount = new Label();
+            ((System.ComponentModel.ISupportInitialize)pbPlayerImage).BeginInit();
+            SuspendLayout();
+            // 
+            // pbPlayerImage
+            // 
+            pbPlayerImage.BorderStyle = BorderStyle.FixedSingle;
+            pbPlayerImage.Location = new Point(5, 5);
+            pbPlayerImage.Name = "pbPlayerImage";
+            pbPlayerImage.Size = new Size(80, 80);
+            pbPlayerImage.SizeMode = PictureBoxSizeMode.Zoom;
+            pbPlayerImage.TabIndex = 0;
+            pbPlayerImage.TabStop = false;
+            // 
+            // lblPlayerName
+            // 
+            lblPlayerName.AutoSize = true;
+            lblPlayerName.Font = new Font("Segoe UI", 10F);
+            lblPlayerName.Location = new Point(90, 5);
+            lblPlayerName.MaximumSize = new Size(200, 0);
+            lblPlayerName.Name = "lblPlayerName";
+            lblPlayerName.Size = new Size(0, 19);
+            lblPlayerName.TabIndex = 1;
+            // 
+            // lblCount
+            // 
+            lblCount.AutoSize = true;
+            lblCount.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblCount.Location = new Point(90, 30);
+            lblCount.Name = "lblCount";
+            lblCount.Size = new Size(0, 15);
+            lblCount.TabIndex = 2;
+            // 
+            // RankListItem
+            // 
+            BackColor = Color.White;
+            Controls.Add(pbPlayerImage);
+            Controls.Add(lblPlayerName);
+            Controls.Add(lblCount);
+            Name = "RankListItem";
+            Size = new Size(300, 90);
+            ((System.ComponentModel.ISupportInitialize)pbPlayerImage).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         public void SetData(string playerName, int count)
         {
             if (string.IsNullOrEmpty(playerName)) return;
 
-            this.playerNameLabel.Text = playerName;
-            this.countLabel.Text = count.ToString("N0");
+            this.lblPlayerName.Text = playerName;
+            this.lblCount.Text = count.ToString("N0");
             this.Count = count;
             LoadPlayerImage(playerName);
         }
@@ -72,21 +87,21 @@ namespace WindowsFormsApp
                 var image = imageManager.LoadPlayerImage(playerName);
                 if (image != null)
                 {
-                    if (playerImage.Image != null)
+                    if (pbPlayerImage.Image != null)
                     {
-                        var oldImage = playerImage.Image;
-                        playerImage.Image = image;
+                        var oldImage = pbPlayerImage.Image;
+                        pbPlayerImage.Image = image;
                         oldImage.Dispose();
                     }
                     else
                     {
-                        playerImage.Image = image;
+                        pbPlayerImage.Image = image;
                     }
                 }
             }
             catch (Exception)
             {
-                // If image loading fails, the default image will be shown
+
             }
         }
 
@@ -94,13 +109,13 @@ namespace WindowsFormsApp
         {
             if (disposing)
             {
-                if (playerImage.Image != null)
+                if (pbPlayerImage.Image != null)
                 {
-                    playerImage.Image.Dispose();
+                    pbPlayerImage.Image.Dispose();
                 }
-                playerImage.Dispose();
-                playerNameLabel.Dispose();
-                countLabel.Dispose();
+                pbPlayerImage.Dispose();
+                lblPlayerName.Dispose();
+                lblCount.Dispose();
             }
             base.Dispose(disposing);
         }

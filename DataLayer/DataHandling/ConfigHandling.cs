@@ -11,7 +11,6 @@ namespace DataLayer.DataHandling
 
         public static void SaveConfig()
         {
-            // Use a StringBuilder to construct the config content
             StringBuilder stringBuilder = new StringBuilder();
 
             stringBuilder
@@ -23,7 +22,6 @@ namespace DataLayer.DataHandling
                 .AppendLine($"versusCountryIndex={JsonModels.ConfigFile.versusCountryIndex}")
                 .AppendLine($"resolution={JsonModels.ConfigFile.resolution}");
 
-            // Write the constructed string to the config file
             File.WriteAllText(ResourceLocations.ConfigPath, stringBuilder.ToString());
         }
 
