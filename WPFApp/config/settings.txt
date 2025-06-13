@@ -1,4 +1,4 @@
-language=Croatian
+language=English
 gender=Male
 country=Croatia
 versusCountry=Nigeria

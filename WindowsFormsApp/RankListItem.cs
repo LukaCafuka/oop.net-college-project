@@ -25,9 +25,9 @@ namespace WindowsFormsApp
             lblCount = new Label();
             ((System.ComponentModel.ISupportInitialize)pbPlayerImage).BeginInit();
             SuspendLayout();
-            // 
+
             // pbPlayerImage
-            // 
+ 
             pbPlayerImage.BorderStyle = BorderStyle.FixedSingle;
             pbPlayerImage.Location = new Point(5, 5);
             pbPlayerImage.Name = "pbPlayerImage";
@@ -35,9 +35,9 @@ namespace WindowsFormsApp
             pbPlayerImage.SizeMode = PictureBoxSizeMode.Zoom;
             pbPlayerImage.TabIndex = 0;
             pbPlayerImage.TabStop = false;
-            // 
+
             // lblPlayerName
-            // 
+
             lblPlayerName.AutoSize = true;
             lblPlayerName.Font = new Font("Segoe UI", 10F);
             lblPlayerName.Location = new Point(90, 5);
@@ -45,18 +45,18 @@ namespace WindowsFormsApp
             lblPlayerName.Name = "lblPlayerName";
             lblPlayerName.Size = new Size(0, 19);
             lblPlayerName.TabIndex = 1;
-            // 
+
             // lblCount
-            // 
+
             lblCount.AutoSize = true;
             lblCount.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             lblCount.Location = new Point(90, 30);
             lblCount.Name = "lblCount";
             lblCount.Size = new Size(0, 15);
             lblCount.TabIndex = 2;
-            // 
+
             // RankListItem
-            // 
+
             BackColor = Color.White;
             Controls.Add(pbPlayerImage);
             Controls.Add(lblPlayerName);

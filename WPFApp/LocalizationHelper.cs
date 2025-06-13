@@ -39,7 +39,6 @@ namespace WPFApp
             Thread.CurrentThread.CurrentUICulture = newCulture;
             Thread.CurrentThread.CurrentCulture = newCulture;
 
-            // Notify all bound properties that they should update
             OnPropertyChanged(string.Empty);
         }
 
